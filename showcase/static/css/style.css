@@ -1,0 +1,177 @@
+/* ==========================================================================
+   GLOBAL CONFIGURATION & CSS VARIABLES (AÇIK TEMA)
+   ========================================================================== */
+:root {
+    --bg-main: #F4F6F9;         /* Sayfanın genel ferah, hafif gri-mavi arka planı */
+    --bg-surface: #FFFFFF;      /* Kartlar ve paneller için saf beyaz yüzey */
+    --bg-surface-hover: #FAFBFC;/* Hover durumunda çok hafif ton değişimi */
+    --text-primary: #1E293B;    /* Koyu lacivert/keskin slate ana metin (Saf siyah değil) */
+    --text-muted: #64748B;      /* Yumuşak gri yardımcı metin */
+    --color-primary: #3B82F6;   /* Canlı teknoloji mavisi */
+    --color-success: #10B981;   /* XP ve Başarı Yeşili */
+    --color-warning: #F59E0B;   /* Scratch Turuncusu / Canlı Sarı */
+    --border-color: #E2E8F0;    /* İnce, şık ve gözü yormayan açık gri border */
+}
+
+body { 
+    font-family: 'Space Grotesk', sans-serif; 
+    background-color: var(--bg-main); 
+    color: var(--text-primary);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Bootstrap varsayılan renklerini açık temaya göre eziyoruz */
+.text-dark { color: var(--text-primary) !important; }
+.text-muted { color: var(--text-muted) !important; }
+
+/* ==========================================================================
+   HEADER / NAVBAR SECTION
+   ========================================================================== */
+.navbar {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.navbar-brand {
+    color: var(--color-primary) !important;
+}
+
+/* ==========================================================================
+   HERO (GİRİŞ) SECTION
+   ========================================================================== */
+.hero-section {
+    /* Yukarıdan aşağıya, beyazdan hafif griye yumuşak bir geçişle akış başlatıyoruz */
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-main) 100%);
+    padding: 100px 0 60px 0;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-badge {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+    color: var(--color-primary) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.video-card-wrapper {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 40px rgba(148, 163, 184, 0.12) !important;
+}
+
+/* ==========================================================================
+   FEATURES (NASIL ÇALIŞIR) SECTION
+   ========================================================================== */
+#features {
+    background-color: var(--bg-main) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.feature-badge {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    color: var(--color-success) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.feature-card {
+    background-color: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    background-color: var(--bg-surface-hover) !important;
+    box-shadow: 0 16px 32px rgba(148, 163, 184, 0.15) !important;
+}
+
+/* ==========================================================================
+   PROJECTS GALLERY SECTION
+   ========================================================================== */
+#projects {
+    background-color: var(--bg-main);
+}
+
+.project-card { 
+    background-color: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important; 
+    border-radius: 16px; 
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; 
+    overflow: hidden; 
+}
+
+.project-card:hover { 
+    transform: translateY(-6px); 
+    background-color: var(--bg-surface-hover) !important;
+    box-shadow: 0 16px 32px rgba(148, 163, 184, 0.15) !important; 
+}
+
+.card-media-wrapper {
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-media-wrapper img {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-position: center !important;
+}
+
+/* ==========================================================================
+   BADGES & BUTTONS CONFIGURATION
+   ========================================================================== */
+.badge-scratch { 
+    background-color: rgba(245, 158, 11, 0.1); 
+    color: #D97706; 
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    font-weight: 600; 
+    padding: 6px 12px; 
+}
+
+.badge-python { 
+    background-color: rgba(59, 130, 246, 0.1); 
+    color: #2563EB; 
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    font-weight: 600; 
+    padding: 6px 12px; 
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+}
+
+.btn-primary:hover {
+    background-color: #2563EB;
+    border-color: #2563EB;
+    color: #FFFFFF;
+}
+
+.btn-warning {
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+    color: #FFFFFF; /* Açık temada okunabilirlik için yazıyı beyaz yaptık */
+}
+
+.btn-warning:hover {
+    background-color: #D97706;
+    border-color: #D97706;
+    color: #FFFFFF;
+}
+
+.hover-danger:hover {
+    color: #EF4444 !important; /* Canlı kırmızı */
+    background-color: #FEF2F2 !important; /* Çok hafif kırmızımsı arka plan */
+    border-color: #FCA5A5 !important;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}

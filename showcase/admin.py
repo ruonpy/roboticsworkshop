@@ -1,79 +1,90 @@
+# admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import StudentProfile, StudentProject, StudentBadge  # Rozetler için StudentBadge modelini içe aktar
-from .models import Badge # Badge modelini içe aktar
+from .models import StudentProfile, StudentProject, StudentBadge, Badge
+
+# ==========================================================================
+# 🏅 GAMIFICATION BADGES REGISTRATION
+# ==========================================================================
 
 @admin.register(Badge)
 class BadgeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'code', 'badge_color') # Listede görünecek sütunlar
+    """Configuration interface for managing dynamic gamification rewards."""
+    list_display = ('title', 'code', 'badge_color')
 
-# ==========================================
-# 1. ÖĞRENCİ PROFİLİ BİRLEŞTİRME (INLINE)
-# ==========================================
+
+# ==========================================================================
+# 👥 ADVANCED USER & STUDENT PROFILE INTEGRATION (INLINE)
+# ==========================================================================
+
 class StudentProfileInline(admin.StackedInline):
+    """Inlines student gamification metrics directly into the core User entity view."""
     model = StudentProfile
     can_delete = False
-    verbose_name_plural = 'Öğrenci Atölye Bilgileri'
+    verbose_name_plural = 'Student Workshop Profile Details'
 
-# ==========================================
-# 2. GELİŞMİŞ KULLANICI (USER) YÖNETİMİ
-# ==========================================
+
 class UserAdmin(BaseUserAdmin):
+    """Extends standard authentication dashboard with embedded student parameters."""
     inlines = (StudentProfileInline,)
-    # Admin listesinde kullanıcı adı, ad, soyad ve yetki durumunu gösterir
     list_display = ('username', 'first_name', 'last_name', 'is_staff')
-    # Listede isme göre arama yapabilmeni sağlar
     search_fields = ('username', 'first_name', 'last_name')
 
-# Eski varsayılan User tanımını kaldırıp yeni hazırladığımız yapıyı kaydediyoruz
+
+# Re-register core User model to implement modified admin layout bindings
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
-# ==========================================
-# 3. PROJE YÖNETİMİ (Mevcut Kodunun Güncel Hali)
-# ==========================================
+# ==========================================================================
+# 🚀 STUDENT PROJECT METRICS & EVALUATION SUITE
+# ==========================================================================
+
 @admin.register(StudentProject)
 class ProjectAdmin(admin.ModelAdmin):
-    # 🌟 'like_count' sütununu listeye ekledik, böylece dışarıdan kaç beğeni olduğunu görebilirsin
+    """
+    Manages student project portfolios, features visual data sorting,
+    and deploys real-time social metric recalculation listeners.
+    """
     list_display = ('get_student_name', 'project_type', 'like_count')
-    
     list_filter = ('project_type',)
     search_fields = ('student__first_name', 'student__last_name', 'student__username')
-    
-    # 🌟 Beğenen öğrencileri kolayca seçip listeden çıkarabilmen için çift kutulu arayüzü açar
     filter_horizontal = ('liked_by',)
     
-    # Öğrencinin adını ve soyadını çekmek için özel fonksiyonun (Aynen kaldı)
     def get_student_name(self, obj):
+        """Resolves structural author metadata cleanly for display columns."""
         return obj.student.get_full_name() or obj.student.username
-    get_student_name.short_description = 'Öğrenci Adı Soyadı'
+    get_student_name.short_description = 'Author Name / Moniker'
 
-    # 🌟 KRİTİK OTOMASYON: Admin panelinden birini silip "Kaydet" dediğinde 
-    # beğeni sayısını otomatik olarak yeniden hesaplar ve senkronize eder.
     def save_related(self, request, form, formsets, change):
+        """
+        Data Integrity Interceptor: Automatically recalibrates and caches 
+        accurate total like counters whenever relation models get modified.
+        """
         super().save_related(request, form, formsets, change)
         project = form.instance
         project.like_count = project.liked_by.count()
         project.save()
+
+
+# ==========================================================================
+# 🎖️ HISTORICAL EARNED BADGES TRANSACTIONS
+# ==========================================================================
+
 @admin.register(StudentBadge)
 class StudentBadgeAdmin(admin.ModelAdmin):
-    # Listede öğrenci adını, rozet adını ve ne zaman kazandığını görelim
+    """Logs and monitors certified student achievement prize acquisitions."""
     list_display = ('get_student_name', 'get_badge_title', 'earned_at')
-    
-    # Hızlıca filtreleme yapabilmek için filtre kutuları ekleyelim
     list_filter = ('badge', 'earned_at')
-    
-    # Öğrenci ismine göre arama yapabilmek için arama çubuğu
     search_fields = ('student__first_name', 'student__last_name', 'student__username')
 
-    # Öğrencinin adını pürüzsüz getiren fonksiyonumuz
     def get_student_name(self, obj):
+        """Resolves recipient credentials safely for lookup views."""
         return obj.student.get_full_name() or obj.student.username
-    get_student_name.short_description = 'Öğrenci'
+    get_student_name.short_description = 'Recipient Student'
 
-    # Rozet adını pürüzsüz getiren fonksiyonumuz
     def get_badge_title(self, obj):
+        """Resolves target moniker references from bound entity definitions."""
         return obj.badge.title
-    get_badge_title.short_description = 'Kazanılan Rozet'
+    get_badge_title.short_description = 'Acquired Badge'

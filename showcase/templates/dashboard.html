@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    
+    <div class="card border-0 shadow-sm p-4 mb-4" style="background: var(--bg-surface); border-radius: 20px;">
+        <div class="row align-items-center g-4">
+            <div class="col-md-auto text-center">
+                {% if student.profile.profile_image %}
+                    <img src="{{ student.profile.profile_image.url }}" class="rounded-circle object-fit-cover shadow-sm border border-light-subtle" style="width: 110px; height: 110px;" alt="Profil">
+                {% else %}
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm mx-auto" style="width: 110px; height: 110px; font-size: 2.5rem;">
+                        {{ student.first_name|slice:":1" }}{{ student.last_name|slice:":1" }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md text-center text-md-start">
+                <span class="badge bg-dark rounded-pill mb-2 px-3 py-1.5 fw-bold" style="font-size: 0.8rem;">LVL {{ student.profile.current_level }}</span>
+                <h2 class="fw-bold text-dark mb-1">{{ student.get_full_name|default:student.username }}</h2>
+                <p class="text-primary fw-semibold mb-3">{{ student.profile.rank_title }}</p>
+                
+                <div style="max-width: 400px; margin: 0 auto; margin-left: 0;">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-muted small fw-semibold">Atölye Gelişim Skoru (EXP)</span>
+                        <span class="fw-bold text-success" style="font-size: 0.8rem;">{{ student.profile.progress_percentage }}/100</span>
+                    </div>
+                    <div class="progress" style="height: 12px; background-color: #e9ecef; border-radius: 6px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: {{ student.profile.progress_percentage }}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if student.earned_badges.all %}
+    <div class="mb-5">
+        <h4 class="fw-bold text-dark mb-3">🏆 Kazanılan Başarı Rozetleri</h4>
+        <div class="row g-3">
+            {% for student_badge in student.earned_badges.all %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center">
+                <div class="p-3 border rounded shadow-sm h-100 d-flex flex-column align-items-center justify-content-center" style="background: var(--bg-surface); border-color: var(--border-color)!important; border-radius: 14px;">
+                    <div class="mb-2 d-inline-flex align-items-center justify-content-center rounded-circle text-white shadow-sm" 
+                         style="width: 50px; height: 50px; background-color: {{ student_badge.badge.badge_color }};">
+                        <i class="fa-solid {{ student_badge.badge.icon_class }} fa-lg"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 0.85rem;">{{ student_badge.badge.title }}</h6>
+                    <small class="text-muted d-block" style="font-size: 0.7rem; line-height: 1.2;">{{ student_badge.badge.description }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div>
+        <h4 class="fw-bold text-dark mb-4">🎮 Üretilen Oyun ve Uygulamalar</h4>
+        <div class="row g-4">
+            {% for project in projects %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm" style="border-radius: 16px;">
+                    <div class="ratio ratio-4x3 bg-light">
+                        {% if project.cover_image %}
+                            <img src="{{ project.cover_image.url }}" alt="{{ project.student.get_full_name }}" loading="lazy" class="w-100 h-100 object-fit-cover">
+                        {% else %}
+                            {% if project.project_type == 'scratch' %}
+                                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #ff9900, #ff5500);">
+                                    <i class="fa-solid fa-cat fa-3x mb-2"></i>
+                                    <span class="fw-semibold small">Scratch Projesi</span>
+                                </div>
+                            {% else %}
+                                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #1e1e2f, #3776ab);">
+                                    <i class="fa-brands fa-python fa-3x mb-2"></i>
+                                    <span class="fw-semibold small">Python Projesi</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1" style="background: var(--bg-surface);">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="text-muted small fw-bold">{{ project.created_at|date:"d M Y" }}</span>
+                                {% if project.project_type == 'scratch' %}
+                                    <span class="badge rounded-pill badge-scratch">Scratch</span>
+                                {% else %}
+                                    <span class="badge rounded-pill badge-python">Python</span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text text-muted" style="line-height: 1.5; font-size: 0.92rem; min-height: 4rem;">
+                                {{ project.description }}
+                            </p>
+                        </div>
+                        
+                        <div class="mt-3 d-flex gap-2 align-items-center">
+                            {% if project.project_type == 'scratch' %}
+                                <a href="{{ project.scratch_embed_url }}" target="_blank" class="btn btn-warning flex-grow-1 py-2 rounded-pill fw-bold btn-sm text-white">Oyunu Aç</a>
+                            {% else %}
+                                <a href="{{ project.python_project_url }}" target="_blank" class="btn btn-primary flex-grow-1 py-2 rounded-pill fw-bold btn-sm">Oyunu Aç</a>
+                            {% endif %}
+                            
+                            <span class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-muted fw-bold" style="cursor: default;">
+                                <i class="fa-solid fa-heart me-1 text-danger"></i> {{ project.like_count }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted lead">Öğrencimiz henüz dijital sergiye bir proje yüklemedi.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

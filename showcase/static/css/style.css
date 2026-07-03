@@ -1,16 +1,16 @@
 /* ==========================================================================
-   GLOBAL CONFIGURATION & CSS VARIABLES (AÇIK TEMA)
+   GLOBAL CONFIGURATION & CSS VARIABLES (LIGHT THEME)
    ========================================================================== */
 :root {
-    --bg-main: #F4F6F9;         /* Sayfanın genel ferah, hafif gri-mavi arka planı */
-    --bg-surface: #FFFFFF;      /* Kartlar ve paneller için saf beyaz yüzey */
-    --bg-surface-hover: #FAFBFC;/* Hover durumunda çok hafif ton değişimi */
-    --text-primary: #1E293B;    /* Koyu lacivert/keskin slate ana metin (Saf siyah değil) */
-    --text-muted: #64748B;      /* Yumuşak gri yardımcı metin */
-    --color-primary: #3B82F6;   /* Canlı teknoloji mavisi */
-    --color-success: #10B981;   /* XP ve Başarı Yeşili */
-    --color-warning: #F59E0B;   /* Scratch Turuncusu / Canlı Sarı */
-    --border-color: #E2E8F0;    /* İnce, şık ve gözü yormayan açık gri border */
+    --bg-main: #F4F6F9;
+    --bg-surface: #FFFFFF;      
+    --bg-surface-hover: #FAFBFC;
+    --text-primary: #1E293B;
+    --text-muted: #64748B;
+    --color-primary: #3B82F6;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --border-color: #E2E8F0;
 }
 
 body { 
@@ -23,7 +23,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Bootstrap varsayılan renklerini açık temaya göre eziyoruz */
 .text-dark { color: var(--text-primary) !important; }
 .text-muted { color: var(--text-muted) !important; }
 
@@ -41,10 +40,9 @@ html {
 }
 
 /* ==========================================================================
-   HERO (GİRİŞ) SECTION
+   HERO (INTRO) SECTION
    ========================================================================== */
 .hero-section {
-    /* Yukarıdan aşağıya, beyazdan hafif griye yumuşak bir geçişle akış başlatıyoruz */
     background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-main) 100%);
     padding: 100px 0 60px 0;
     min-height: 65vh;
@@ -63,8 +61,25 @@ html {
     box-shadow: 0 20px 40px rgba(148, 163, 184, 0.12) !important;
 }
 
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    overflow: hidden;
+    background-color: #000000;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 /* ==========================================================================
-   FEATURES (NASIL ÇALIŞIR) SECTION
+   FEATURES (HOW IT WORKS) SECTION
    ========================================================================== */
 #features {
     background-color: var(--bg-main) !important;
@@ -159,7 +174,7 @@ html {
 .btn-warning {
     background-color: var(--color-warning);
     border-color: var(--color-warning);
-    color: #FFFFFF; /* Açık temada okunabilirlik için yazıyı beyaz yaptık */
+    color: #FFFFFF; 
 }
 
 .btn-warning:hover {
@@ -169,8 +184,8 @@ html {
 }
 
 .hover-danger:hover {
-    color: #EF4444 !important; /* Canlı kırmızı */
-    background-color: #FEF2F2 !important; /* Çok hafif kırmızımsı arka plan */
+    color: #EF4444 !important; 
+    background-color: #FEF2F2 !important; 
     border-color: #FCA5A5 !important;
     transform: scale(1.05);
     transition: all 0.2s ease;

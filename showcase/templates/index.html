@@ -1,259 +1,412 @@
-{% extends 'base.html' %}
-{% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <header class="hero-section pt-4">
-    <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-5">
-                <div class="badge hero-badge rounded-pill px-3 py-2 mb-3 fw-bold">
-                    Robotik Kodlama Atölyesi
-                </div>
-                <h1 class="display-6 fw-bold mb-3 text-dark">
-                    Öğrenci Proje <br><span class="text-primary">Takip Paneli</span>
-                </h1>
-                <p class="lead text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6;">
-                    Öğrencilerimizin ders içi etkinliklerde ve kendi zamanlarında Scratch ile Python platformlarında geliştirdiği güncel projeleri, uygulamaları ve gelişim süreçlerini buradan takip edebilirsiniz.
-                </p>
-                <div class="d-flex gap-3">
-                    <a href="#projects" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm fw-bold fs-6">Projeleri İncele</a>
-                </div>
-            </div>
-            
-            <div class="col-lg-7">
-                <div class="card border-0 shadow-lg overflow-hidden video-card-wrapper" style="border-radius: 20px; background: var(--bg-surface);">
-    <div class="d-flex align-items-center px-3 py-2.5 border-bottom" style="background: var(--bg-surface); border-color: var(--border-color) !important;">
-        <div class="d-flex gap-1.5 me-2">
-            <span class="rounded-circle bg-danger" style="width: 10px; height: 10px; display: inline-block;"></span>
-            <span class="rounded-circle bg-warning ms-1" style="width: 10px; height: 10px; display: inline-block;"></span>
-            <span class="rounded-circle bg-success ms-1" style="width: 10px; height: 10px; display: inline-block;"></span>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <div class="badge hero-badge rounded-pill px-3 py-2 mb-3 fw-bold">
+          Robotik Kodlama Atölyesi
         </div>
-        <small class="text-muted mx-auto fw-semibold" style="font-size: 0.8rem;">Atölye Tanıtım Videosu</small>
-    </div>
-    
-    <div class="ratio ratio-16x9">
-        <iframe src="https://drive.google.com/file/d/1mketLK9r_RzqwTTf3buHoVU0eYSK3VoE/preview" title="Atölye Tanıtım Videosu" allowfullscreen></iframe>
-    </div>
-</div>
-            </div>
+        <h1 class="display-6 fw-bold mb-3 text-dark">
+          Öğrenci Proje <br /><span class="text-primary">Takip Paneli</span>
+        </h1>
+        <p class="lead text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6">
+          Öğrenciilerimizin ders içi etkinliklerde ve kendi zamanlarında Scratch
+          ile Python platformlarında geliştirdiği güncel projeleri, uygulamaları
+          ve gelişim süreçlerini buradan takip edebilirsiniz.
+        </p>
+        <div class="d-flex gap-3">
+          <a href="#projects" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm fw-bold fs-6">
+            Projeleri İncele
+          </a>
         </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-lg overflow-hidden video-card-wrapper" style="border-radius: 20px; background: var(--bg-surface)">
+          <div class="d-flex align-items-center px-3 py-2.5 border-bottom" style="background: var(--bg-surface); border-color: var(--border-color) !important;">
+            <div class="d-flex gap-1.5 me-2">
+              <span class="rounded-circle bg-danger" style="width: 10px; height: 10px; display: inline-block"></span>
+              <span class="rounded-circle bg-warning ms-1" style="width: 10px; height: 10px; display: inline-block"></span>
+              <span class="rounded-circle bg-success ms-1" style="width: 10px; height: 10px; display: inline-block"></span>
+            </div>
+            <small class="text-muted mx-auto fw-semibold" style="font-size: 0.8rem">Atölye Tanıtım Videosu</small>
+          </div>
+
+          <div class="video-container">
+            <video controls preload="metadata" playsinline>
+              <source src="https://drive.google.com/file/d/1mketLK9r_RzqwTTf3buHoVU0eYSK3VoE/preview" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </header>
 
 <section id="features" class="py-5 bg-white border-bottom border-light-subtle">
-    <div class="container py-2">
-        <div class="text-center mb-5">
-            <span class="badge feature-badge rounded-pill px-3 py-2 fw-bold mb-2">Nasıl Çalışır?</span>
-            <h2 class="fw-bold text-dark">Atölye Gelişim Ekosistemi</h2>
-            <p class="text-muted">Öğrencilerimizin projelerini sergilerken aynı zamanda oyunlaştırılmış bir dünyada büyümesini sağlıyoruz.</p>
-        </div>
-        
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm" style="border-radius: 16px;">
-                    <div class="fs-1 text-primary mb-3">
-                        <i class="fa-solid fa-gamepad"></i>
-                    </div>
-                    <h4 class="fw-bold text-dark" style="font-size: 1.25rem;">Canlı Oyun Arcade</h4>
-                    <p class="text-muted small mb-0">Öğrencilerin kodladığı Pygame ve Scratch projeleri, doğrudan web tarayıcısı üzerinden anlık olarak oynanabilir ve test edilebilir</p>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm" style="border-radius: 16px;">
-                    <div class="fs-1 text-success mb-3">
-                        <i class="fa-solid fa-trophy"></i>
-                    </div>
-                    <h4 class="fw-bold text-dark" style="font-size: 1.25rem;">XP ve Seviye Sistemi</h4>
-                    <p class="text-muted small mb-0">Her yeni proje yüklemede ve kodlama başarısında EXP kazanılır. Profiller yeni rütbeler ve dijital rozetlerle ödüllendirilir.</p>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm" style="border-radius: 16px;">
-                    <div class="fs-1 text-warning mb-3">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </div>
-                    <h4 class="fw-bold text-dark" style="font-size: 1.25rem;">Güvenli Kodlama Alanı</h4>
-                    <p class="text-muted small mb-0">Öğrenci hesapları tamamen öğretmen kontrolündedir. Dış tehditlerden uzak, çocukların gelişimine odaklanmış güvenli bir dijital sergi.</p>
-                </div>
-            </div>
-        </div>
+  <div class="container py-2">
+    <div class="text-center mb-5">
+      <span class="badge feature-badge rounded-pill px-3 py-2 fw-bold mb-2"
+        >Nasıl Çalışır?</span
+      >
+      <h2 class="fw-bold text-dark">Atölye Gelişim Ekosistemi</h2>
+      <p class="text-muted">
+        Öğrencilerimizin projelerini sergilerken aynı zamanda oyunlaştırılmış
+        bir dünyada büyümesini sağlıyoruz.
+      </p>
     </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div
+          class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm"
+          style="border-radius: 16px"
+        >
+          <div class="fs-1 text-primary mb-3">
+            <i class="fa-solid fa-gamepad"></i>
+          </div>
+          <h4 class="fw-bold text-dark" style="font-size: 1.25rem">
+            Canlı Oyun Arcade
+          </h4>
+          <p class="text-muted small mb-0">
+            Öğrencilerin kodladığı Pygame ve Scratch projeleri, doğrudan web
+            tarayıcısı üzerinden anlık olarak oynanabilir ve test edilebilir
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div
+          class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm"
+          style="border-radius: 16px"
+        >
+          <div class="fs-1 text-success mb-3">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h4 class="fw-bold text-dark" style="font-size: 1.25rem">
+            XP ve Seviye Sistemi
+          </h4>
+          <p class="text-muted small mb-0">
+            Her yeni proje yüklemede ve kodlama başarısında EXP kazanılır.
+            Profiller yeni rütbeler ve dijital rozetlerle ödüllendirilir.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div
+          class="card h-100 p-4 text-center feature-card border-0 bg-light-subtle shadow-sm"
+          style="border-radius: 16px"
+        >
+          <div class="fs-1 text-warning mb-3">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <h4 class="fw-bold text-dark" style="font-size: 1.25rem">
+            Güvenli Kodlama Alanı
+          </h4>
+          <p class="text-muted small mb-0">
+            Öğrenci hesapları tamamen öğretmen kontrolündedir. Dış tehditlerden
+            uzak, çocukların gelişimine odaklanmış güvenli bir dijital sergi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <main id="projects" class="container my-5 py-3">
-    
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-dark">Öğrenci Proje Sergi Alanı</h2>
-        <p class="text-muted">Öğrencilerimizin hazırladığı oyun ve uygulamaları inceleyebilir, beğendiğiniz projelere kalp atarak onlara EXP kazandırabilirsiniz!</p>
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-dark">Öğrenci Proje Sergi Alanı</h2>
+    <p class="text-muted">
+      Öğrencilerimizin hazırladığı oyun ve uygulamaları inceleyebilir,
+      beğendiğiniz projelere kalp atarak onlara EXP kazandırabilirsiniz!
+    </p>
+  </div>
+
+  <form method="GET" action="" class="row g-3 align-items-center mb-5">
+    <input type="hidden" name="type" value="{{ selected_type }}" />
+    <input type="hidden" name="sort" value="{{ selected_sort }}" />
+
+    <div class="col-md-4">
+      <div class="input-group shadow-sm rounded-pill overflow-hidden border">
+        <span class="input-group-text bg-white border-0 ps-3">
+          <i class="fa-solid fa-magnifying-glass text-muted"></i>
+        </span>
+        <input
+          type="text"
+          name="q"
+          value="{{ search_query }}"
+          class="form-control border-0 py-2.5"
+          placeholder="Öğrenci adı veya proje ara..."
+          style="box-shadow: none"
+        />
+        {% if search_query or selected_type or selected_sort != 'newest' %}
+        <a
+          href="?"
+          class="btn btn-light d-flex align-items-center border-0 px-3 text-muted"
+          title="Filtreleri Temizle"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </a>
+        {% endif %}
+      </div>
     </div>
 
-    <form method="GET" action="" class="row g-3 align-items-center mb-5">
-        <input type="hidden" name="type" value="{{ selected_type }}">
-        <input type="hidden" name="sort" value="{{ selected_sort }}">
-
-        <div class="col-md-4">
-            <div class="input-group shadow-sm rounded-pill overflow-hidden border">
-                <span class="input-group-text bg-white border-0 ps-3">
-                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
-                </span>
-                <input type="text" name="q" value="{{ search_query }}" class="form-control border-0 py-2.5" placeholder="Öğrenci adı veya proje ara..." style="box-shadow: none;">
-                {% if search_query or selected_type or selected_sort != 'newest' %}
-                    <a href="?" class="btn btn-light d-flex align-items-center border-0 px-3 text-muted" title="Filtreleri Temizle">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="col-md-4 text-md-center">
-            <div class="btn-group shadow-sm rounded-pill p-1 bg-white border" role="group">
-                <a href="?type={% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" 
-                   class="btn btn-sm rounded-pill px-3 py-2 {% if not selected_type %}btn-primary text-white{% else %}btn-white text-muted border-0{% endif %}">
-                    Hepsi
-                </a>
-                <a href="?type=scratch{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" 
-                   class="btn btn-sm rounded-pill px-3 py-2 {% if selected_type == 'scratch' %}btn-warning text-white{% else %}btn-white text-muted border-0{% endif %}">
-                    🟠 Scratch
-                </a>
-                <a href="?type=python{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" 
-                   class="btn btn-sm rounded-pill px-3 py-2 {% if selected_type == 'python' %}btn-dark text-white{% else %}btn-white text-muted border-0{% endif %}">
-                    🔵 Python
-                </a>
-            </div>
-        </div>
-
-        <div class="col-md-4 text-md-end">
-            <div class="d-inline-flex align-items-center gap-2 bg-white border rounded-pill p-1 px-3 shadow-sm">
-                <label for="id-sort-select" class="small text-muted fw-bold mb-0 text-nowrap">
-                    <i class="fa-solid fa-sort me-1"></i> Sırala:
-                </label>
-                <select name="sort" id="id-sort-select" class="form-select form-select-sm border-0 fw-semibold text-dark p-1 pe-4" style="box-shadow: none; cursor: pointer; background-size: 12px;" onchange="this.form.submit()">
-                    <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>⏰ En Yeniler</option>
-                    <option value="popular" {% if selected_sort == 'popular' %}selected{% endif %}>🔥 En Beğenilenler</option>
-                </select>
-            </div>
-        </div>
-    </form>
-
-    <div class="row g-4">
-        {% for project in projects %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm" style="border-radius: 16px; position: relative;">
-                    
-                    {% if "day" not in project.created_at|timesince and "week" not in project.created_at|timesince or "1 day" in project.created_at|timesince or "2 day" in project.created_at|timesince or "3 day" in project.created_at|timesince or "4 day" in project.created_at|timesince or "5 day" in project.created_at|timesince or "6 day" in project.created_at|timesince %}
-                        <span class="badge bg-success position-absolute m-3 px-3 py-2 rounded-pill shadow fw-bold text-white" style="top: 0; left: 0; z-index: 10; font-size: 0.75rem; letter-spacing: 0.5px; border: 2px solid white;">
-                            ✨ YENİ
-                        </span>
-                    {% endif %}
-                    
-                    <div class="ratio ratio-4x3 card-media-wrapper bg-light">
-                        {% if project.cover_image %}
-                            <img src="{{ project.cover_image.url }}" alt="{{ project.student.get_full_name }}" loading="lazy" class="w-100 h-100 object-fit-cover">
-                        {% else %}
-                            {% if project.project_type == 'scratch' %}
-                                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #ff9900, #ff5500);">
-                                    <i class="fa-solid fa-cat fa-3x mb-2"></i>
-                                    <span class="fw-semibold small">Scratch Proje Yayını</span>
-                                </div>
-                            {% else %}
-                                <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #1e1e2f, #3776ab);">
-                                    <i class="fa-brands fa-python fa-3x mb-2"></i>
-                                    <span class="fw-semibold small">Python Proje Yayını</span>
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-
-                    <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1" style="background: var(--bg-surface);">
-                        <div>
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h5 class="card-title mb-0 fw-bold text-dark">
-                                    {{ project.student.get_full_name|default:project.student.username }}
-                                </h5>
-                                {% if project.project_type == 'scratch' %}
-                                    <span class="badge rounded-pill badge-scratch">Scratch</span>
-                                {% else %}
-                                    <span class="badge rounded-pill badge-python">Python</span>
-                                {% endif %}
-                            </div>
-                            <p class="card-text text-muted" style="line-height: 1.5; font-size: 0.92rem; min-height: 4.5rem;">
-                                {{ project.description }}
-                            </p>
-                        </div>
-                        
-                        <div class="mt-3 d-flex gap-2">
-                            {% if project.project_type == 'scratch' %}
-                                <a href="{{ project.scratch_embed_url }}" target="_blank" class="btn btn-warning flex-grow-1 py-2 rounded-pill fw-bold btn-sm text-white">Projeyi Çalıştır</a>
-                            {% else %}
-                                <a href="{{ project.python_project_url }}" target="_blank" class="btn btn-primary flex-grow-1 py-2 rounded-pill fw-bold btn-sm">Oyunu Başlat</a>
-                            {% endif %}
-
-                            {% if request.user.is_authenticated %}
-                                {% if request.user in project.liked_by.all %}
-                                    <button class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-danger fw-bold" disabled>
-                                        <i class="fa-solid fa-heart me-1"></i> <span class="count-text">{{ project.like_count }}</span>
-                                    </button>
-                                {% else %}
-                                    <button data-project-id="{{ project.id }}" class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-pill btn-sm px-3 text-muted hover-danger fw-bold like-btn">
-                                        <i class="fa-regular fa-heart me-1 text-danger icon-heart"></i> <span class="count-text">{{ project.like_count }}</span>
-                                    </button>
-                                {% endif %}
-                            {% else %}
-                                <span class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-muted fw-bold">
-                                    <i class="fa-regular fa-heart me-1 text-danger"></i> {{ project.like_count }}
-                                </span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        {% empty %}
-            <div class="col-12 text-center py-5">
-                <div class="text-muted mb-3"><i class="fa-regular fa-folder-open fa-3x"></i></div>
-                <p class="text-muted lead">Aradığınız kriterlere uygun bir proje bulunamadı.</p>
-            </div>
-        {% endfor %}
+    <div class="col-md-4 text-md-center">
+      <div
+        class="btn-group shadow-sm rounded-pill p-1 bg-white border"
+        role="group"
+      >
+        <a
+          href="?type={% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+          class="btn btn-sm rounded-pill px-3 py-2 {% if not selected_type %}btn-primary text-white{% else %}btn-white text-muted border-0{% endif %}"
+        >
+          Hepsi
+        </a>
+        <a
+          href="?type=scratch{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+          class="btn btn-sm rounded-pill px-3 py-2 {% if selected_type == 'scratch' %}btn-warning text-white{% else %}btn-white text-muted border-0{% endif %}"
+        >
+          🟠 Scratch
+        </a>
+        <a
+          href="?type=python{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+          class="btn btn-sm rounded-pill px-3 py-2 {% if selected_type == 'python' %}btn-dark text-white{% else %}btn-white text-muted border-0{% endif %}"
+        >
+          🔵 Python
+        </a>
+      </div>
     </div>
 
-    {% if projects.has_other_pages %}
-        <nav aria-label="Proje sayfaları" class="mt-5">
-            <ul class="pagination justify-content-center shadow-sm d-inline-flex bg-white p-1 rounded-pill border">
-                
-                {% if projects.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link border-0 rounded-pill text-muted px-3 py-2" href="?page={{ projects.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </a>
-                    </li>
-                {% endif %}
+    <div class="col-md-4 text-md-end">
+      <div
+        class="d-inline-flex align-items-center gap-2 bg-white border rounded-pill p-1 px-3 shadow-sm"
+      >
+        <label
+          for="id-sort-select"
+          class="small text-muted fw-bold mb-0 text-nowrap"
+        >
+          <i class="fa-solid fa-sort me-1"></i> Sırala:
+        </label>
+        <select
+          name="sort"
+          id="id-sort-select"
+          class="form-select form-select-sm border-0 fw-semibold text-dark p-1 pe-4"
+          style="box-shadow: none; cursor: pointer; background-size: 12px"
+          onchange="this.form.submit()"
+        >
+          <option
+            value="newest"
+            {%
+            if
+            selected_sort=""
+            ="newest"
+            %}selected{%
+            endif
+            %}
+          >
+            ⏰ En Yeniler
+          </option>
+          <option
+            value="popular"
+            {%
+            if
+            selected_sort=""
+            ="popular"
+            %}selected{%
+            endif
+            %}
+          >
+            🔥 En Beğenilenler
+          </option>
+        </select>
+      </div>
+    </div>
+  </form>
 
-                {% for num in projects.paginator.page_range %}
-                    {% if projects.number == num %}
-                        <li class="page-item active"><span class="page-link border-0 rounded-pill px-3 py-2 bg-primary text-white fw-bold">{{ num }}</span></li>
-                    {% elif num > projects.number|add:'-3' and num < projects.number|add:'3' %}
-                        <li class="page-item">
-                            <a class="page-link border-0 rounded-pill text-muted px-3 py-2 fw-semibold" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">
-                                {{ num }}
-                            </a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
+  <div class="row g-4">
+    {% for project in projects %}
+    <div class="col-md-6 col-lg-4">
+      <div
+        class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm"
+        style="border-radius: 16px; position: relative"
+      >
+        {% if "day" not in project.created_at|timesince and "week" not in
+        project.created_at|timesince or "1 day" in project.created_at|timesince
+        or "2 day" in project.created_at|timesince or "3 day" in
+        project.created_at|timesince or "4 day" in project.created_at|timesince
+        or "5 day" in project.created_at|timesince or "6 day" in
+        project.created_at|timesince %}
+        <span
+          class="badge bg-success position-absolute m-3 px-3 py-2 rounded-pill shadow fw-bold text-white"
+          style="
+            top: 0;
+            left: 0;
+            z-index: 10;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border: 2px solid white;
+          "
+        >
+          ✨ YENİ
+        </span>
+        {% endif %}
 
-                {% if projects.has_next %}
-                    <li class="page-item">
-                        <a class="page-link border-0 rounded-pill text-muted px-3 py-2" href="?page={{ projects.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </a>
-                    </li>
-                {% endif %}
-                
-            </ul>
-        </nav>
-    {% endif %}
+        <div class="ratio ratio-4x3 card-media-wrapper bg-light">
+          {% if project.cover_image %}
+          <img
+            src="{{ project.cover_image.url }}"
+            alt="{{ project.student.get_full_name }}"
+            loading="lazy"
+            class="w-100 h-100 object-fit-cover"
+          />
+          {% else %} {% if project.project_type == 'scratch' %}
+          <div
+            class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white"
+            style="background: linear-gradient(135deg, #ff9900, #ff5500)"
+          >
+            <i class="fa-solid fa-cat fa-3x mb-2"></i>
+            <span class="fw-semibold small">Scratch Proje Yayını</span>
+          </div>
+          {% else %}
+          <div
+            class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white"
+            style="background: linear-gradient(135deg, #1e1e2f, #3776ab)"
+          >
+            <i class="fa-brands fa-python fa-3x mb-2"></i>
+            <span class="fw-semibold small">Python Proje Yayını</span>
+          </div>
+          {% endif %} {% endif %}
+        </div>
+
+        <div
+          class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1"
+          style="background: var(--bg-surface)"
+        >
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="card-title mb-0 fw-bold text-dark">
+                {{
+                project.student.get_full_name|default:project.student.username
+                }}
+              </h5>
+              {% if project.project_type == 'scratch' %}
+              <span class="badge rounded-pill badge-scratch">Scratch</span>
+              {% else %}
+              <span class="badge rounded-pill badge-python">Python</span>
+              {% endif %}
+            </div>
+            <p
+              class="card-text text-muted"
+              style="line-height: 1.5; font-size: 0.92rem; min-height: 4.5rem"
+            >
+              {{ project.description }}
+            </p>
+          </div>
+
+          <div class="mt-3 d-flex gap-2">
+            {% if project.project_type == 'scratch' %}
+            <a
+              href="{{ project.scratch_embed_url }}"
+              target="_blank"
+              class="btn btn-warning flex-grow-1 py-2 rounded-pill fw-bold btn-sm text-white"
+              >Projeyi Çalıştır</a
+            >
+            {% else %}
+            <a
+              href="{{ project.python_project_url }}"
+              target="_blank"
+              class="btn btn-primary flex-grow-1 py-2 rounded-pill fw-bold btn-sm"
+              >Oyunu Başlat</a
+            >
+            {% endif %} {% if request.user.is_authenticated %} {% if
+            request.user in project.liked_by.all %}
+            <button
+              class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-danger fw-bold"
+              disabled
+            >
+              <i class="fa-solid fa-heart me-1"></i>
+              <span class="count-text">{{ project.like_count }}</span>
+            </button>
+            {% else %}
+            <button
+              data-project-id="{{ project.id }}"
+              class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-pill btn-sm px-3 text-muted hover-danger fw-bold like-btn"
+            >
+              <i class="fa-regular fa-heart me-1 text-danger icon-heart"></i>
+              <span class="count-text">{{ project.like_count }}</span>
+            </button>
+            {% endif %} {% else %}
+            <span
+              class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-muted fw-bold"
+            >
+              <i class="fa-regular fa-heart me-1 text-danger"></i> {{
+              project.like_count }}
+            </span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <div class="text-muted mb-3">
+        <i class="fa-regular fa-folder-open fa-3x"></i>
+      </div>
+      <p class="text-muted lead">
+        Aradığınız kriterlere uygun bir proje bulunamadı.
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if projects.has_other_pages %}
+  <nav aria-label="Proje sayfaları" class="mt-5">
+    <ul
+      class="pagination justify-content-center shadow-sm d-inline-flex bg-white p-1 rounded-pill border"
+    >
+      {% if projects.has_previous %}
+      <li class="page-item">
+        <a
+          class="page-link border-0 rounded-pill text-muted px-3 py-2"
+          href="?page={{ projects.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+        >
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+      </li>
+      {% endif %} {% for num in projects.paginator.page_range %} {% if
+      projects.number == num %}
+      <li class="page-item active">
+        <span
+          class="page-link border-0 rounded-pill px-3 py-2 bg-primary text-white fw-bold"
+          >{{ num }}</span
+        >
+      </li>
+      {% elif num > projects.number|add:'-3' and num < projects.number|add:'3'
+      %}
+      <li class="page-item">
+        <a
+          class="page-link border-0 rounded-pill text-muted px-3 py-2 fw-semibold"
+          href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+        >
+          {{ num }}
+        </a>
+      </li>
+      {% endif %} {% endfor %} {% if projects.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link border-0 rounded-pill text-muted px-3 py-2"
+          href="?page={{ projects.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+        >
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
 </main>
 {% block extra_js %}
-    <script src="{% static 'js/like.js' %}"></script>
-{% endblock %}
-
-{% endblock %}
+<script src="{% static 'js/like.js' %}"></script>
+{% endblock %} {% endblock %}

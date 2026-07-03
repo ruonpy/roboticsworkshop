@@ -60,13 +60,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'akdm.wsgi.application'
 
 # ==========================================================================
-# 💾 DATABASE ROUTING
+# 💾 DATABASE ROUTING (POSTGRESQL & SQLITE FAILSAFE)
 # ==========================================================================
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
 # ==========================================================================

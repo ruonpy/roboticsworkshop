@@ -78,6 +78,29 @@ html {
     border: 0; 
 }
 
+.sound-video-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    z-index: 2;
+    transition: background 0.2s ease;
+}
+
+.sound-video-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    color: #ffffff;
+}
+
 /* ==========================================================================
    FEATURES (HOW IT WORKS) SECTION
    ========================================================================== */

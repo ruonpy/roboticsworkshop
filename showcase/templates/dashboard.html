@@ -62,7 +62,7 @@
                 <div class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm" style="border-radius: 16px;">
                     <div class="ratio ratio-4x3 bg-light">
                         {% if project.cover_image %}
-                            <img src="{{ project.cover_image.url }}" alt="{{ project.student.get_full_name }}" loading="lazy" class="w-100 h-100 object-fit-cover">
+                            <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" loading="lazy" class="w-100 h-100 object-fit-cover">
                         {% else %}
                             {% if project.project_type == 'scratch' %}
                                 <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #ff9900, #ff5500);">
@@ -88,6 +88,7 @@
                                     <span class="badge rounded-pill badge-python">Python</span>
                                 {% endif %}
                             </div>
+                            <h5 class="card-title fw-bold text-dark mb-2">{{ project.title }}</h5>
                             <p class="card-text text-muted" style="line-height: 1.5; font-size: 0.92rem; min-height: 4rem;">
                                 {{ project.description }}
                             </p>
@@ -114,6 +115,5 @@
             {% endfor %}
         </div>
     </div>
-
 </div>
 {% endblock %}

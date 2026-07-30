@@ -161,88 +161,95 @@
   </form>
 
   <div class="row g-4">
-    {% for project in projects %}
-    <div class="col-md-6 col-lg-4">
-      <div class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm" style="border-radius: 16px; position: relative">
-        
-        {% if "day" not in project.created_at|timesince and "week" not in project.created_at|timesince or "1 day" in project.created_at|timesince or "2 day" in project.created_at|timesince or "3 day" in project.created_at|timesince or "4 day" in project.created_at|timesince or "5 day" in project.created_at|timesince or "6 day" in project.created_at|timesince %}
-        <span class="badge bg-success position-absolute m-3 px-3 py-2 rounded-pill shadow fw-bold text-white" style="top: 0; left: 0; z-index: 10; font-size: 0.75rem; letter-spacing: 0.5px; border: 2px solid white;">
-          ✨ YENİ
-        </span>
-        {% endif %}
+  {% for project in projects %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card project-card h-100 d-flex flex-column justify-content-between overflow-hidden border-0 shadow-sm" style="border-radius: 16px; position: relative">
+      
+      {% if "day" not in project.created_at|timesince and "week" not in project.created_at|timesince or "1 day" in project.created_at|timesince or "2 day" in project.created_at|timesince or "3 day" in project.created_at|timesince or "4 day" in project.created_at|timesince or "5 day" in project.created_at|timesince or "6 day" in project.created_at|timesince %}
+      <span class="badge bg-success position-absolute m-3 px-3 py-2 rounded-pill shadow fw-bold text-white" style="top: 0; left: 0; z-index: 10; font-size: 0.75rem; letter-spacing: 0.5px; border: 2px solid white;">
+        ✨ YENİ
+      </span>
+      {% endif %}
 
-        <div class="ratio ratio-4x3 card-media-wrapper bg-light">
-          {% if project.cover_image %}
-          <img src="{{ project.cover_image.url }}" alt="{{ project.student.get_full_name }}" loading="lazy" class="w-100 h-100 object-fit-cover" />
-          {% else %} 
-            {% if project.project_type == 'scratch' %}
-            <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #ff9900, #ff5500)">
-              <i class="fa-solid fa-cat fa-3x mb-2"></i>
-              <span class="fw-semibold small">Scratch Proje Yayını</span>
-            </div>
-            {% else %}
-            <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #1e1e2f, #3776ab)">
-              <i class="fa-brands fa-python fa-3x mb-2"></i>
-              <span class="fw-semibold small">Python Proje Yayını</span>
-            </div>
-            {% endif %} 
-          {% endif %}
-        </div>
-
-        <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1" style="background: var(--bg-surface)">
-          <div>
-            <div class="d-flex align-items-center justify-content-between mb-3">
-              <h5 class="card-title mb-0 fw-bold text-dark">
-                {{ project.student.get_full_name|default:project.student.username }}
-              </h5>
-              {% if project.project_type == 'scratch' %}
-              <span class="badge rounded-pill badge-scratch">Scratch</span>
-              {% else %}
-              <span class="badge rounded-pill badge-python">Python</span>
-              {% endif %}
-            </div>
-            <p class="card-text text-muted" style="line-height: 1.5; font-size: 0.92rem; min-height: 4.5rem">
-              {{ project.description }}
-            </p>
+      <div class="ratio ratio-4x3 card-media-wrapper bg-light">
+        {% if project.cover_image %}
+        <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" loading="lazy" class="w-100 h-100 object-fit-cover" />
+        {% else %} 
+          {% if project.project_type == 'scratch' %}
+          <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #ff9900, #ff5500)">
+            <i class="fa-solid fa-cat fa-3x mb-2"></i>
+            <span class="fw-semibold small">Scratch Proje Yayını</span>
           </div>
+          {% else %}
+          <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #1e1e2f, #3776ab)">
+            <i class="fa-brands fa-python fa-3x mb-2"></i>
+            <span class="fw-semibold small">Python Proje Yayını</span>
+          </div>
+          {% endif %} 
+        {% endif %}
+      </div>
 
-          <div class="mt-3 d-flex gap-2">
+      <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1" style="background: var(--bg-surface)">
+        <div>
+          <div class="d-flex align-items-start justify-content-between mb-2">
+            <div>
+              <!-- Proje Başlığı -->
+              <h5 class="card-title mb-1 fw-bold text-dark">
+                {{ project.title }}
+              </h5>
+              <!-- Geliştirici Kullanıcı Adı -->
+              <small class="text-muted d-block">
+                <i class="fa-regular fa-user me-1"></i>@{{ project.student.username }}
+              </small>
+            </div>
             {% if project.project_type == 'scratch' %}
-            <a href="{{ project.scratch_embed_url }}" target="_blank" class="btn btn-warning flex-grow-1 py-2 rounded-pill fw-bold btn-sm text-white">Projeyi Çalıştır</a>
+            <span class="badge rounded-pill badge-scratch">Scratch</span>
             {% else %}
-            <a href="{{ project.python_project_url }}" target="_blank" class="btn btn-primary flex-grow-1 py-2 rounded-pill fw-bold btn-sm">Oyunu Başlat</a>
-            {% endif %} 
-            
-            {% if request.user.is_authenticated %} 
-              {% if request.user in project.liked_by.all %}
-              <button class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-danger fw-bold" disabled>
-                <i class="fa-solid fa-heart me-1"></i>
-                <span class="count-text">{{ project.like_count }}</span>
-              </button>
-              {% else %}
-              <button data-project-id="{{ project.id }}" class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-pill btn-sm px-3 text-muted hover-danger fw-bold like-btn">
-                <i class="fa-regular fa-heart me-1 text-danger icon-heart"></i>
-                <span class="count-text">{{ project.like_count }}</span>
-              </button>
-              {% endif %} 
-            {% else %}
-            <span class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-muted fw-bold">
-              <i class="fa-regular fa-heart me-1 text-danger"></i> {{ project.like_count }}
-            </span>
+            <span class="badge rounded-pill badge-python">Python</span>
             {% endif %}
           </div>
+          <p class="card-text text-muted mt-3" style="line-height: 1.5; font-size: 0.92rem; min-height: 4.5rem">
+            {{ project.description }}
+          </p>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+          {% if project.project_type == 'scratch' %}
+          <a href="{{ project.scratch_embed_url }}" target="_blank" class="btn btn-warning flex-grow-1 py-2 rounded-pill fw-bold btn-sm text-white">Projeyi Çalıştır</a>
+          {% else %}
+          <a href="{{ project.python_project_url }}" target="_blank" class="btn btn-primary flex-grow-1 py-2 rounded-pill fw-bold btn-sm">Oyunu Başlat</a>
+          {% endif %} 
+          
+          {% if request.user.is_authenticated %} 
+            {% if request.user in project.liked_by.all %}
+            <button class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-danger fw-bold" disabled>
+              <i class="fa-solid fa-heart me-1"></i>
+              <span class="count-text">{{ project.like_count }}</span>
+            </button>
+            {% else %}
+            <button data-project-id="{{ project.id }}" class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-pill btn-sm px-3 text-muted hover-danger fw-bold like-btn">
+              <i class="fa-regular fa-heart me-1 text-danger icon-heart"></i>
+              <span class="count-text">{{ project.like_count }}</span>
+            </button>
+            {% endif %} 
+          {% else %}
+          <span class="btn btn-light rounded-pill btn-sm px-3 border border-light-subtle text-muted fw-bold">
+            <i class="fa-regular fa-heart me-1 text-danger"></i> {{ project.like_count }}
+          </span>
+          {% endif %}
         </div>
       </div>
     </div>
-    {% empty %}
-    <div class="col-12 text-center py-5">
-      <div class="text-muted mb-3">
-        <i class="fa-regular fa-folder-open fa-3x"></i>
-      </div>
-      <p class="text-muted lead">Aradığınız kriterlere uygun bir proje bulunamadı.</p>
-    </div>
-    {% endfor %}
   </div>
+  {% empty %}
+  <div class="col-12 text-center py-5">
+    <div class="text-muted mb-3">
+      <i class="fa-regular fa-folder-open fa-3x"></i>
+    </div>
+    <p class="text-muted lead">Aradığınız kriterlere uygun bir proje bulunamadı.</p>
+  </div>
+  {% endfor %}
+</div>
 
   {% if projects.has_other_pages %}
   <nav aria-label="Proje sayfaları" class="mt-5">

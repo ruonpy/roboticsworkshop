@@ -106,6 +106,11 @@ class StudentProject(models.Model):
         ('scratch', 'Scratch Master'),
         ('python', 'Python Coder'),
     ]
+
+    title = models.CharField(
+        max_length=200, 
+        verbose_name="Project Title"
+    )
     
     student = models.ForeignKey(
         User, 
@@ -166,8 +171,7 @@ class StudentProject(models.Model):
         verbose_name_plural = "Student Projects"
 
     def __str__(self):
-        student_name = self.student.get_full_name() or self.student.username
-        return f"{student_name} - {self.get_project_type_display()}"
+        return f"{self.title} (@{self.student.username})"
 
     def save(self, *args, **kwargs):
         """Interceptors targeting pipeline automation scripts (Auto EXP Allocation & Badge Checking)"""

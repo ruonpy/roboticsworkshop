@@ -1,6 +1,8 @@
 {% extends 'base.html' %} 
 {% load static %} 
-
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/showcase.css' %}">
+{% endblock %}
 {% block content %}
 <header class="hero-section pt-4">
   <div class="container">

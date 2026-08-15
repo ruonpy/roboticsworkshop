@@ -1,0 +1,25 @@
+:root {
+    --bg-main: #F4F6F9;
+    --bg-surface: #FFFFFF;      
+    --bg-surface-hover: #FAFBFC;
+    --text-primary: #1E293B;
+    --text-muted: #64748B;
+    --color-primary: #3B82F6;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --border-color: #E2E8F0;
+}
+
+body { 
+    font-family: 'Space Grotesk', sans-serif; 
+    background-color: var(--bg-main); 
+    color: var(--text-primary);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.text-dark { color: var(--text-primary) !important; }
+.text-muted { color: var(--text-muted) !important; }

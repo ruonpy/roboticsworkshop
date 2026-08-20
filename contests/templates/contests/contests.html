@@ -1,0 +1,606 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Tasarım Yarışması — AtölyePaneli
+{% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/contests.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="contest-page">
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+
+    <header class="contest-hero">
+
+        <div class="contest-wrap">
+
+            <div class="contest-eyebrow">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Tasarım Yarışması
+            </div>
+
+            <h1>
+                Tasarım <span>Galerisi</span>
+            </h1>
+
+            <p>
+                Beğendiğin çalışmalara oy verebilirsin.
+                Yarışma bitiminde en çok oy alan tasarımlar podyumda yer alacak.
+            </p>
+
+
+            <!-- ====================================================
+                 STATS
+                 Bu alan yarışma boyunca görünmeye devam eder.
+                 ==================================================== -->
+
+            <div class="contest-stats">
+
+                <!-- Toplam tasarım -->
+
+                <div class="contest-stat">
+
+                    <strong>
+                        {{ submissions|length }}
+                    </strong>
+
+                    <span>
+                        Tasarım
+                    </span>
+
+                </div>
+
+
+                <!-- Kullanıcının kullandığı oy -->
+
+                <div class="contest-stat">
+
+                    <strong>
+                        {{ user_vote_count }}/{{ max_votes }}
+                    </strong>
+
+                    <span>
+                        Kullandığın Oy
+                    </span>
+
+                </div>
+
+
+                <!-- Kalan oy -->
+
+                <div class="contest-stat">
+
+                    <strong>
+                        {{ remaining_votes }}
+                    </strong>
+
+                    <span>
+                        Kalan Oy
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ============================================================
+         MAIN CONTENT
+         ============================================================ -->
+
+    <main class="contest-wrap">
+
+
+        {% if competition %}
+
+
+            <!-- ====================================================
+                 COMPETITION INFO
+                 ==================================================== -->
+
+            <section class="contest-info">
+
+                <div>
+
+                    <span class="contest-info-label">
+
+                        {% if voting_is_open %}
+                            AKTİF YARIŞMA
+                        {% else %}
+                            YARIŞMA SONUÇLANDI
+                        {% endif %}
+
+                    </span>
+
+
+                    <h2>
+                        {{ competition.title }}
+                    </h2>
+
+                </div>
+
+
+                <div class="contest-deadline">
+
+                    <span>
+
+                        {% if voting_is_open %}
+                            Oylama Sonu
+                        {% else %}
+                            Oylama Bitti
+                        {% endif %}
+
+                    </span>
+
+
+                    <strong>
+                        {{ competition.end_date|date:"d F Y H:i" }}
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ====================================================
+                 PODIUM
+                 
+                 SADECE YARIŞMA BİTTİKTEN SONRA GÖRÜNÜR.
+                 ==================================================== -->
+
+            {% if not voting_is_open %}
+
+                <section class="contest-section">
+
+                    <div class="contest-section-head">
+
+                        <div>
+
+                            <h2 class="contest-section-title">
+                                🏆 Yarışma Sonuçları
+                            </h2>
+
+                            <p class="contest-section-subtitle">
+                                En çok oy alan üç tasarım podyumda.
+                            </p>
+
+                        </div>
+
+
+                        <div class="contest-count">
+                            TOP 3 · SONUÇLAR
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="podium">
+
+                        {% for design in podium_designs %}
+
+                            <article
+                                class="
+                                    p-card
+                                    {% if forloop.counter == 1 %}
+                                        gold
+                                    {% elif forloop.counter == 2 %}
+                                        silver
+                                    {% else %}
+                                        bronze
+                                    {% endif %}
+                                "
+                                data-id="{{ design.id }}"
+                            >
+
+
+                                <!-- Rank -->
+
+                                <div class="p-rank">
+
+                                    <span class="p-medal">
+                                        {{ forloop.counter }}
+                                    </span>
+
+                                    {{ forloop.counter }}. sıra
+
+                                </div>
+
+
+
+                                <!-- Image -->
+
+                                <div class="p-frame">
+
+                                    <img
+                                        src="{{ design.image_url }}"
+                                        alt="{{ design.title }}"
+                                        loading="lazy"
+                                    >
+
+                                </div>
+
+
+
+                                <!-- Information -->
+
+                                <div class="p-meta">
+
+                                    <div class="p-user">
+                                        @{{ design.student.username }}
+                                    </div>
+
+
+                                    <div class="p-title">
+                                        {{ design.title }}
+                                    </div>
+
+
+                                    <div class="p-footer">
+
+                                        <div class="votes">
+
+                                            {{ design.total_votes }}
+
+                                            <span>
+                                                oy
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+
+                        {% empty %}
+
+                            <div class="empty-note">
+                                Henüz sonuç bulunmuyor.
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+            {% endif %}
+
+
+
+            <!-- ====================================================
+                 ALL DESIGNS
+                 ==================================================== -->
+
+            <section class="contest-section gallery-section">
+
+
+                <div class="contest-section-head">
+
+                    <div>
+
+                        <h2 class="contest-section-title">
+
+                            {% if voting_is_open %}
+                                🎨 Tüm Tasarımlar
+                            {% else %}
+                                🎨 Yarışma Tasarımları
+                            {% endif %}
+
+                        </h2>
+
+
+                        <p class="contest-section-subtitle">
+
+                            {% if voting_is_open %}
+
+                                Beğendiğin tasarımlara oy verebilirsin.
+
+                            {% else %}
+
+                                Yarışmaya katılan tüm çalışmalar.
+
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="contest-count">
+
+                        {{ submissions|length }} TASARIM
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="gallery-grid">
+
+
+                    {% if voting_is_open %}
+
+                        <!-- ==================================================
+                             YARIŞMA DEVAM EDİYOR
+                             
+                             submissions:
+                             views.py tarafından RANDOM sıralanıyor.
+                             
+                             Oy sayıları gösterilmiyor.
+                             ================================================== -->
+
+                        {% for design in submissions %}
+
+                            <article
+                                class="g-card"
+                                data-id="{{ design.id }}"
+                            >
+
+
+                                <!-- IMAGE -->
+
+                                <div class="g-frame">
+
+                                    <div class="g-frame-inner">
+
+                                        <img
+                                            src="{{ design.image_url }}"
+                                            alt="{{ design.title }}"
+                                            loading="lazy"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- INFORMATION -->
+
+                                <div class="g-meta">
+
+                                    <div class="g-user">
+                                        @{{ design.student.username }}
+                                    </div>
+
+
+                                    <div class="g-footer">
+
+
+                                        <!-- ==============================
+                                             VOTE BUTTON
+                                             ============================== -->
+
+                                        {% if design.student == request.user %}
+
+                                            <button
+                                                type="button"
+                                                class="vote-btn"
+                                                disabled
+                                                title="Kendi tasarımınıza oy veremezsiniz."
+                                            >
+
+                                                <i class="fa-solid fa-user"></i>
+
+                                                Kendi Tasarımın
+
+                                            </button>
+
+
+                                        {% elif design.id in user_voted_ids %}
+
+                                            <button
+                                                type="button"
+                                                class="vote-btn voted"
+                                                disabled
+                                            >
+
+                                                <i class="fa-solid fa-check"></i>
+
+                                                Oy Verildi
+
+                                            </button>
+
+
+                                        {% elif user_vote_count >= max_votes %}
+
+                                            <button
+                                                type="button"
+                                                class="vote-btn"
+                                                disabled
+                                            >
+
+                                                <i class="fa-solid fa-ban"></i>
+
+                                                Oy Hakkın Doldu
+
+                                            </button>
+
+
+                                        {% else %}
+
+                                            <button
+                                                type="button"
+                                                class="vote-btn"
+                                                data-vote-id="{{ design.id }}"
+                                                data-vote-url="{% url 'contests:vote' design.id %}"
+                                            >
+
+                                                <i class="fa-regular fa-heart"></i>
+
+                                                Oy Ver
+
+                                            </button>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+
+                        {% empty %}
+
+                            <div class="empty-note">
+
+                                Henüz yarışmaya eklenen tasarım bulunmuyor.
+
+                            </div>
+
+                        {% endfor %}
+
+
+
+                    {% else %}
+
+                        <!-- ==================================================
+                             YARIŞMA BİTTİ
+                             
+                             other_submissions:
+                             İlk 3 HARİÇ tüm tasarımlar.
+                             
+                             Oy sayıları artık görünür.
+                             ================================================== -->
+
+                        {% for design in other_submissions %}
+
+                            <article
+                                class="g-card"
+                                data-id="{{ design.id }}"
+                            >
+
+
+                                <!-- IMAGE -->
+
+                                <div class="g-frame">
+
+                                    <div class="g-frame-inner">
+
+                                        <img
+                                            src="{{ design.image_url }}"
+                                            alt="{{ design.title }}"
+                                            loading="lazy"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- INFORMATION -->
+
+                                <div class="g-meta">
+
+                                    <div class="g-user">
+                                        @{{ design.student.username }}
+                                    </div>
+
+
+                                    <div class="g-footer">
+
+
+                                        <!-- ==============================
+                                             FINAL VOTE COUNT
+                                             ============================== -->
+
+                                        <div class="votes">
+
+                                            {{ design.total_votes }}
+
+                                            <span>
+                                                oy
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+
+                        {% empty %}
+
+                            <div class="empty-note">
+
+                                İlk üç tasarım dışında başka tasarım bulunmuyor.
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+                </div>
+
+            </section>
+
+
+        {% else %}
+
+
+            <!-- ====================================================
+                 NO ACTIVE COMPETITION
+                 ==================================================== -->
+
+            <section class="contest-empty">
+
+                <div class="contest-empty-icon">
+
+                    <i class="fa-solid fa-palette"></i>
+
+                </div>
+
+
+                <h2>
+                    Şu anda aktif bir yarışma yok.
+                </h2>
+
+
+                <p>
+                    Yeni bir tasarım yarışması başladığında
+                    çalışmalar burada görünecek.
+                </p>
+
+            </section>
+
+
+        {% endif %}
+
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/contests.js' %}"></script>
+
+{% endblock %}

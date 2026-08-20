@@ -110,6 +110,11 @@ class DesignSubmissionAdmin(admin.ModelAdmin):
         'student',
     ]
 
+    # Allows admin to select multiple voters for a submission in a user-friendly interface.
+    filter_horizontal = (
+        'voters',
+    )
+
     readonly_fields = (
         'created_at',
         'display_vote_count',

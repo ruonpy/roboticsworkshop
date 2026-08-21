@@ -1,7 +1,4 @@
-/* =========================================================
-   NAVBAR
-   ========================================================= */
-
+/* ---------------- NAVBAR ---------------- */
 .navbar {
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
@@ -18,29 +15,18 @@
     transform: translateY(-1px);
 }
 
-
-/* =========================================================
-   ANA SAYFA
-   ========================================================= */
-
+/* ---------------- HOME LINK ---------------- */
 .navbar-home-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-
     color: #6b7280;
     text-decoration: none;
-
     font-size: 0.85rem;
     font-weight: 600;
-
     padding-left: 14px;
-
     border-left: 1px solid var(--border-color);
-
-    transition:
-        color 0.2s ease,
-        transform 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .navbar-home-link:hover {
@@ -48,29 +34,20 @@
     transform: translateX(2px);
 }
 
-
-/* =========================================================
-   TASARIM YARIŞMASI
-   ========================================================= */
-
+/* ---------------- CONTEST NAV BUTTON ---------------- */
 .contest-nav-btn {
     position: absolute;
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
-
     height: 42px;
     padding: 0 17px;
-
     border: 2px solid transparent;
     border-radius: 12px;
-
     background:
         linear-gradient(#ffffff, #ffffff) padding-box,
         linear-gradient(
@@ -83,59 +60,35 @@
             #7b61ff,
             #ff4d6d
         ) border-box;
-
     background-size:
         100% 100%,
         300% 100%;
-
     color: #1f2937;
-
     text-decoration: none;
-
     font-size: 0.88rem;
     font-weight: 800;
-
     white-space: nowrap;
-
-    box-shadow:
-        0 4px 12px rgba(123, 97, 255, 0.10);
-
+    box-shadow: 0 4px 12px rgba(123, 97, 255, 0.10);
     animation: contestRainbow 5s linear infinite;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contest-nav-btn:hover {
     color: #111827;
-
-    transform:
-        translate(-50%, -50%)
-        scale(1.06);
-
-    box-shadow:
-        0 8px 22px rgba(123, 97, 255, 0.20);
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 8px 22px rgba(123, 97, 255, 0.20);
 }
 
 .contest-nav-btn:active {
-    transform:
-        translate(-50%, -50%)
-        scale(0.97);
+    transform: translate(-50%, -50%) scale(0.97);
 }
 
-
-/* =========================================================
-   YARIŞMA İKONU
-   ========================================================= */
-
+/* ---------------- CONTEST ICON ---------------- */
 .contest-nav-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     font-size: 1.15rem;
-
     animation: contestTrophy 2s ease-in-out infinite;
 }
 
@@ -144,36 +97,23 @@
     100% {
         transform: rotate(0deg) translateY(0);
     }
-
     50% {
         transform: rotate(-8deg) translateY(-2px);
     }
 }
 
-
-/* =========================================================
-   YARIŞMA YAZISI
-   ========================================================= */
-
+/* ---------------- CONTEST TEXT ---------------- */
 .contest-nav-text {
     position: relative;
     z-index: 2;
 }
 
-
-/* =========================================================
-   PARILTI
-   ========================================================= */
-
+/* ---------------- SPARKLE EFFECTS ---------------- */
 .contest-nav-sparkle {
     position: absolute;
-
     color: #ffb703;
-
     font-size: 0.8rem;
-
     pointer-events: none;
-
     animation: sparkleFloat 1.8s ease-in-out infinite;
 }
 
@@ -185,9 +125,7 @@
 .sparkle-two {
     bottom: -6px;
     left: 10px;
-
     color: #7b61ff;
-
     animation-delay: 0.7s;
 }
 
@@ -197,31 +135,24 @@
         opacity: 0.35;
         transform: scale(0.7) rotate(0deg);
     }
-
     50% {
         opacity: 1;
         transform: scale(1.15) rotate(20deg);
     }
 }
 
-
-/* =========================================================
-   RAINBOW BORDER ANİMASYONU
-   ========================================================= */
-
+/* ---------------- RAINBOW BORDER ANIMATION ---------------- */
 @keyframes contestRainbow {
     0% {
         background-position:
             0 0,
             0% 50%;
     }
-
     50% {
         background-position:
             0 0,
             100% 50%;
     }
-
     100% {
         background-position:
             0 0,
@@ -229,22 +160,13 @@
     }
 }
 
-
-/* =========================================================
-   MOBİL
-   ========================================================= */
-
+/* ---------------- RESPONSIVE / MOBILE ---------------- */
 @media (max-width: 768px) {
-
     .contest-nav-btn {
         position: static;
-
         transform: none;
-
         height: 38px;
-
         padding: 0 11px;
-
         font-size: 0.78rem;
     }
 
@@ -263,12 +185,9 @@
     .navbar-home-link {
         display: none;
     }
-
 }
 
-
 @media (max-width: 480px) {
-
     .contest-nav-text {
         display: none;
     }
@@ -286,5 +205,4 @@
     .contest-nav-sparkle {
         display: none;
     }
-
 }

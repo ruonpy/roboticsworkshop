@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from showcase.forms import LowercaseUsernameAuthenticationForm
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,6 +12,7 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('showcase.urls')), 
     path('contests/', include('contests.urls')),
+    path("robots.txt", views.robots_txt, name="robots_txt"),
 ]
 
 if settings.DEBUG:

@@ -4,9 +4,7 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ==========================================================================
-# 🔐 ENVIRONMENT CONFIGURATION
-# ==========================================================================
+# ---------------- ENVIRONMENT CONFIGURATION ----------------
 env = environ.Env(
     DEBUG=(bool, False) 
 )
@@ -17,9 +15,7 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
-# ==========================================================================
-# 📦 APPLICATION SYSTEM LAYOUT
-# ==========================================================================
+# ---------------- APPLICATION SYSTEM LAYOUT ----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -65,16 +61,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'akdm.wsgi.application'
 
-# ==========================================================================
-# 💾 DATABASE ROUTING (POSTGRESQL & SQLITE FAILSAFE)
-# ==========================================================================
+# ---------------- DATABASE CONFIGURATION ----------------
 DATABASES = {
     'default': env.db('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
-# ==========================================================================
-# 🛡️ SECURITY & VALIDATION GATEWAYS
-# ==========================================================================
+# ---------------- SECURITY & AUTHENTICATION ----------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -82,17 +74,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ==========================================================================
-# 🌍 LOCALIZATION & TIME CONTROL
-# ==========================================================================
+# ---------------- LOCALIZATION & TIMEZONE ----------------
 LANGUAGE_CODE = 'tr'
 TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 USE_TZ = True
 
-# ==========================================================================
-# 📂 STATIC & MEDIA ASSETS FILE STORAGE
-# ==========================================================================
+# ---------------- STATIC & MEDIA ASSETS ----------------
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -104,8 +92,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# ==========================================================================
-# 🔄 AUTHENTICATION REDIRECT FLOW
-# ==========================================================================
+# ---------------- AUTHENTICATION REDIRECTS ----------------
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

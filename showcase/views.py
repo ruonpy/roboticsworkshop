@@ -61,57 +61,57 @@ def homepage(request):
 @login_required
 @require_POST
 def like_project(request, project_id):
-    """
-    Handles secure project likes and XP rewards.
+    try:
+        with transaction.atomic():
+            project = get_object_or_404(
+                StudentProject.objects.select_for_update(),
+                id=project_id
+            )
 
-    XP rules:
-    - Student likes their own project: Project owner -> +5 XP
-    - Student likes another student's project: Liker -> +2 XP, Owner -> +10 XP
-    """
-    with transaction.atomic():
-        project = get_object_or_404(
-            StudentProject.objects.select_for_update(),
-            id=project_id
-        )
-        user = request.user
+            user = request.user
 
-        if project.liked_by.filter(id=user.id).exists():
-            return JsonResponse(
-                {
+            if project.liked_by.filter(id=user.id).exists():
+                return JsonResponse({
                     'status': 'error',
                     'message': 'Zaten beğendiniz.'
-                },
-                status=400
+                }, status=400)
+
+            # Like
+            project.liked_by.add(user)
+
+            # Sayaç
+            project.like_count += 1
+            project.save(update_fields=['like_count'])
+
+            # Proje sahibi profili
+            project_owner_profile, _ = StudentProfile.objects.get_or_create(
+                user=project.student
             )
 
-        # 1. Register Like
-        project.liked_by.add(user)
-        project.like_count += 1
-        project.save(update_fields=['like_count'])
+            # XP
+            if project.student == user:
+                project_owner_profile.gain_xp(5)
+            else:
+                liker_profile, _ = StudentProfile.objects.get_or_create(
+                    user=user
+                )
 
-        # 2. Fetch Project Owner Profile
-        project_owner_profile, _ = StudentProfile.objects.get_or_create(
-            user=project.student
-        )
+                liker_profile.gain_xp(2)
+                project_owner_profile.gain_xp(10)
 
-        # 3. Distribute XP
-        if project.student == user:
-            project_owner_profile.gain_xp(5)
-        else:
-            liker_profile, _ = StudentProfile.objects.get_or_create(
-                user=user
-            )
-            liker_profile.gain_xp(2)
-            project_owner_profile.gain_xp(10)
-
-    # 4. Return Success Response
-    return JsonResponse(
-        {
+        return JsonResponse({
             'status': 'success',
             'like_count': project.like_count
-        }
-    )
+        })
 
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
 
 # STUDENT PROFILE & DASHBOARD VIEWS
 

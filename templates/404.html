@@ -1,0 +1,76 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>404 - Sayfa Bulunamadı</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notfound.css' %}">
+</head>
+<body>
+
+<main class="notfound-page">
+    <div class="notfound-wrap">
+
+        <!-- 404 BADGE -->
+        <span class="notfound-eyebrow">
+            Hata 404
+        </span>
+
+        <!-- HEADING -->
+        <h1 class="notfound-title">
+            Bu sayfa bulunamadı
+        </h1>
+
+        <p class="notfound-text">
+            Aradığın sayfa kaldırılmış, taşınmış ya da hiç var olmamış olabilir.
+            Ama merak etme, seni doğru yere geri götürebiliriz.
+        </p>
+
+        <!-- TERMINAL CARD -->
+        <div class="notfound-terminal">
+            <div class="notfound-terminal-bar">
+                <span class="notfound-terminal-dot"></span>
+                <span class="notfound-terminal-dot"></span>
+                <span class="notfound-terminal-dot"></span>
+
+                <span class="notfound-terminal-label">
+                    konsol
+                </span>
+            </div>
+
+            <pre class="notfound-terminal-body"><span class="tk-prompt">&gt;&gt;&gt;</span> <span class="tk-call">proje.ara</span>(<span class="tk-string">"bu-sayfa"</span>)
+<span class="tk-prompt">Traceback (most recent call last):</span>
+  <span class="tk-prompt">File "site.py", line 404, in proje.ara</span>
+<span class="tk-error">PageNotFoundError:</span> "/bu-sayfa" mevcut değil<span class="tk-cursor"></span></pre>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="notfound-actions">
+            <a href="/" class="notfound-btn notfound-btn-primary">
+                <i class="fa-solid fa-house"></i>
+                Anasayfaya dön
+            </a>
+
+            <a href="/projects/" class="notfound-btn notfound-btn-ghost">
+                <i class="fa-solid fa-folder-open"></i>
+                Projeleri keşfet
+            </a>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

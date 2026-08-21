@@ -9,18 +9,16 @@ from django.db.models import Q
 from .models import StudentProject, StudentProfile
 
 
-# CORE DASHBOARD & SHOWCASE VIEWS
+# ============================================================
+# HOMEPAGE & PROJECT SHOWCASE
+# ============================================================
 
 def homepage(request):
-    """
-    Renders the primary student project showcase dashboard.
-    Handles server-side filtering, case-insensitive search queries,
-    dynamic metrics sorting, and paginated response payloads.
-    """
     project_list = StudentProject.objects.all().order_by('-id')
 
-    # 1. Processing Search Filter
+    # Search
     search_query = request.GET.get('q', '').strip()
+
     if search_query:
         project_list = project_list.filter(
             Q(student__first_name__icontains=search_query) |
@@ -29,19 +27,26 @@ def homepage(request):
             Q(description__icontains=search_query)
         )
 
-    # 2. Processing Track Type Segment Filter
+    # Project type filter
     project_type = request.GET.get('type', '').strip().lower()
-    if project_type in ['scratch', 'python']:
-        project_list = project_list.filter(project_type=project_type)
 
-    # 3. Processing Engagement Sorting Metrics
+    if project_type in ['scratch', 'python']:
+        project_list = project_list.filter(
+            project_type=project_type
+        )
+
+    # Sorting
     sort_by = request.GET.get('sort', 'newest').strip().lower()
+
     if sort_by == 'popular':
-        project_list = project_list.order_by('-like_count', '-id')
+        project_list = project_list.order_by(
+            '-like_count',
+            '-id'
+        )
     else:
         project_list = project_list.order_by('-id')
 
-    # 4. Server-Side Pagination
+    # Pagination
     paginator = Paginator(project_list, 9)
     page_number = request.GET.get('page', 1)
     projects = paginator.get_page(page_number)
@@ -56,71 +61,76 @@ def homepage(request):
     return render(request, 'index.html', context)
 
 
-# ENGAGEMENT MECHANICS & EXP GAMIFICATION ENDPOINTS
+# ============================================================
+# LIKE SYSTEM & XP
+# ============================================================
 
 @login_required
 @require_POST
 def like_project(request, project_id):
-    try:
-        with transaction.atomic():
-            project = get_object_or_404(
-                StudentProject.objects.select_for_update(),
-                id=project_id
-            )
 
-            user = request.user
+    with transaction.atomic():
 
-            if project.liked_by.filter(id=user.id).exists():
-                return JsonResponse({
+        project = get_object_or_404(
+            StudentProject.objects.select_for_update(),
+            id=project_id
+        )
+
+        user = request.user
+
+        # Prevent duplicate likes
+        if project.liked_by.filter(id=user.id).exists():
+            return JsonResponse(
+                {
                     'status': 'error',
                     'message': 'Zaten beğendiniz.'
-                }, status=400)
-
-            # Like
-            project.liked_by.add(user)
-
-            # Sayaç
-            project.like_count += 1
-            project.save(update_fields=['like_count'])
-
-            # Proje sahibi profili
-            project_owner_profile, _ = StudentProfile.objects.get_or_create(
-                user=project.student
+                },
+                status=400
             )
 
-            # XP
-            if project.student == user:
-                project_owner_profile.gain_xp(5)
-            else:
-                liker_profile, _ = StudentProfile.objects.get_or_create(
-                    user=user
-                )
+        # Add like
+        project.liked_by.add(user)
 
-                liker_profile.gain_xp(2)
-                project_owner_profile.gain_xp(10)
+        # Update cached like counter
+        project.like_count += 1
+        project.save(update_fields=['like_count'])
 
-        return JsonResponse({
+        # Get or create project owner's profile
+        project_owner_profile, _ = StudentProfile.objects.get_or_create(
+            user=project.student
+        )
+
+        # XP distribution
+        if project.student == user:
+
+            # Student likes their own project
+            project_owner_profile.gain_xp(5)
+
+        else:
+
+            # Student likes another student's project
+            liker_profile, _ = StudentProfile.objects.get_or_create(
+                user=user
+            )
+
+            liker_profile.gain_xp(2)
+            project_owner_profile.gain_xp(10)
+
+    return JsonResponse(
+        {
             'status': 'success',
             'like_count': project.like_count
-        })
+        }
+    )
 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
 
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
-
-# STUDENT PROFILE & DASHBOARD VIEWS
+# ============================================================
+# STUDENT DASHBOARD
+# ============================================================
 
 @login_required
 def student_dashboard(request):
-    """
-    Compiles isolated student profile achievements, earned badges,
-    and customized progression metrics for the logged-in student.
-    """
+
     my_projects = StudentProject.objects.filter(
         student=request.user
     ).order_by('-id')

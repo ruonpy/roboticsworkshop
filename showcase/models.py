@@ -197,7 +197,7 @@ class Badge(models.Model):
     Blueprint table definitions managing gamification system awards, 
     unlocked criteria configurations, and CSS styling guidelines.
     """
-    code = models.Persona = models.CharField(
+    code = models.CharField(
         max_length=50, 
         unique=True, 
         verbose_name="Internal Unique Identity Code"

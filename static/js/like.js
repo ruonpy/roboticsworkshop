@@ -26,21 +26,18 @@ function getCookie(name) {
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Intercept all active like button elements inside the showcase viewport
     const likeButtons = document.querySelectorAll('.like-btn');
 
     likeButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Extract local DOM state variables
             const projectId = this.getAttribute('data-project-id');
             const countText = this.querySelector('.count-text');
             const iconHeart = this.querySelector('.icon-heart');
             const currentButton = this;
             const csrftoken = getCookie('csrftoken');
 
-            // Dispatch secure asynchronous POST payload to the server-side validator
             fetch(`/project/${projectId}/like/`, {
                 method: 'POST',
                 headers: {
@@ -48,17 +45,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     'X-CSRFToken': csrftoken
                 }
             })
-            .then(response => response.json())
+            .then(async response => {
+                // Sunucu 200 OK dönmediyse (500, 403, 302 vs.) gelen hatayı yakala
+                if (!response.ok) {
+                    if (response.status === 403 || response.redirected) {
+                        alert("Beğenmek için lütfen önce giriş yapın.");
+                        window.location.href = "/login/"; // Veya login sayfanızın adresi
+                        return;
+                    }
+                    const errorText = await response.text();
+                    throw new Error(`Sunucu Hatası (${response.status}): ${errorText.substring(0, 100)}...`);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.status === 'success') {
-                    // Update user interface parameters dynamically without reloading
+                if (data && data.status === 'success') {
                     countText.textContent = data.like_count;
-                    iconHeart.classList.remove('fa-regular');
-                    iconHeart.classList.add('fa-solid');
+                    if (iconHeart) {
+                        iconHeart.classList.remove('fa-regular');
+                        iconHeart.classList.add('fa-solid');
+                    }
                     
                     currentButton.classList.remove('text-muted');
                     currentButton.classList.add('text-danger', 'btn-light');
                     currentButton.setAttribute('disabled', 'true');
+                } else if (data && data.message) {
+                    alert(data.message);
                 }
             })
             .catch(error => console.error('Operational Error:', error));

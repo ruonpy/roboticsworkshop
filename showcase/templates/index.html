@@ -38,20 +38,32 @@
           </div>
 
           <div class="video-container">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/WmGeWa8F3gI?si=DLsbozxKYNPDHgbG"
-              title="Atölye Tanıtım Videosu"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen>
-            </iframe>
+              <div
+                  class="youtube-placeholder"
+                  data-video-id="WmGeWa8F3gI"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Atölye tanıtım videosunu oynat"
+              >
+                  <img
+                      src="https://i.ytimg.com/vi/WmGeWa8F3gI/maxresdefault.jpg"
+                      alt="Atölye Tanıtım Videosu"
+                      loading="eager"
+                  >
 
-            <a href="https://www.youtube.com/watch?v=DsstBvHVxmY"
-               target="_blank"
-               rel="noopener"
-               class="sound-video-btn">
-              🔊 Sesli izle
-            </a>
+                  <div class="youtube-play-button">
+                      <i class="fa-solid fa-play"></i>
+                  </div>
+              </div>
+
+              <a
+                  href="https://www.youtube.com/watch?v=DsstBvHVxmY"
+                  target="_blank"
+                  rel="noopener"
+                  class="sound-video-btn"
+              >
+                  🔊 Sesli izle
+              </a>
           </div>
         </div>
       </div>
@@ -289,5 +301,6 @@
 </main>
 {% endblock %}
 {% block extra_js %}
-<script src="{% static 'js/like.js' %}"></script>
-{% endblock %} 
+<script src="{% static 'js/like.js' %}" defer></script>
+<script src="{% static 'js/youtube-lazy.js' %}" defer></script>
+{% endblock %}

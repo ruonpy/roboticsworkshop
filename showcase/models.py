@@ -3,9 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from .utils import check_and_grant_badges, check_teacher_badges
 
-# ==========================================================================
 # 🎮 GAMIFICATION & STUDENT PROFILE CONFIGURATION
-# ==========================================================================
 
 class StudentProfile(models.Model):
     """
@@ -18,40 +16,13 @@ class StudentProfile(models.Model):
         related_name='profile', 
         verbose_name="User Account"
     )
-    profile_image = models.ImageField(
-        upload_to="profile_images/", 
-        null=True, 
-        blank=True, 
-        verbose_name="Avatar / Profile Image"
-    )
-    birth_date = models.DateField(
-        null=True, 
-        blank=True, 
-        verbose_name="Date of Birth"
-    )
-    parent_phone = models.CharField(
-        max_length=15, 
-        blank=True, 
-        null=True, 
-        verbose_name="Parent Contact Number"
-    )
-    school_grade = models.CharField(
-        max_length=20, 
-        blank=True, 
-        null=True, 
-        verbose_name="School Grade / Age Group"
-    )
+    
     teacher_notes = models.TextField(
         blank=True, 
         null=True, 
         verbose_name="Teacher's Internal Notes"
     )
     
-    # Gamification Core Metrics
-    level = models.IntegerField(
-        default=1, 
-        verbose_name="Current Level"
-    )
     exp = models.IntegerField(
         default=0, 
         verbose_name="Total Experience Points (EXP)"
@@ -92,10 +63,7 @@ class StudentProfile(models.Model):
         self.exp += amount
         self.save()
 
-
-# ==========================================================================
-# 🚀 STUDENT PROJECT ARCHIVE CONFIGURATION
-# ==========================================================================
+# STUDENT PROJECT ARCHIVE CONFIGURATION
 
 class StudentProject(models.Model):
     """

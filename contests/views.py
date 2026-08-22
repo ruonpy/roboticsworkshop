@@ -1,42 +1,29 @@
-from django.shortcuts import render, get_object_or_404
+import logging
+
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 
 from .models import Competition, DesignSubmission
 
 
-# ============================================================
+logger = logging.getLogger(__name__)
+
+
 # SETTINGS
-# ============================================================
 
 MAX_VOTES_PER_COMPETITION = 3
 
 
-# ============================================================
 # SHOWCASE
-# ============================================================
 
 @login_required
 def contests_showcase(request):
     """
     Displays the active competition showcase.
-
-    During the competition:
-    - Designs are shown in random order.
-    - Vote counts are hidden.
-    - Podium is hidden.
-
-    After the competition:
-    - Top 3 designs are displayed on the podium.
-    - Vote counts are visible.
     """
-
-    # ---------------------------------------------------------
-    # Find active competition
-    # ---------------------------------------------------------
-
     active_competition = (
         Competition.objects
         .filter(is_active=True)
@@ -44,6 +31,11 @@ def contests_showcase(request):
     )
 
     if not active_competition:
+        logger.info(
+            "Showcase visited but no active competition exists. user_id=%s",
+            request.user.id
+        )
+
         return render(
             request,
             'contests/contests.html',
@@ -52,15 +44,7 @@ def contests_showcase(request):
             }
         )
 
-    # ---------------------------------------------------------
-    # Competition status
-    # ---------------------------------------------------------
-
     voting_is_open = active_competition.voting_is_open
-
-    # ---------------------------------------------------------
-    # User's votes
-    # ---------------------------------------------------------
 
     user_voted_ids = set(
         active_competition.submissions
@@ -75,10 +59,6 @@ def contests_showcase(request):
         0
     )
 
-    # ---------------------------------------------------------
-    # Get submissions
-    # ---------------------------------------------------------
-
     submissions_qs = (
         active_competition.submissions
         .select_related('student')
@@ -90,31 +70,15 @@ def contests_showcase(request):
         )
     )
 
-    # ---------------------------------------------------------
-    # DURING COMPETITION
-    #
-    # Random order prevents first-position advantage.
-    # ---------------------------------------------------------
-
     if voting_is_open:
-
         submissions = list(
             submissions_qs.order_by('?')
         )
 
-        # No podium during voting.
         podium_designs = []
-
         other_submissions = submissions
 
-    # ---------------------------------------------------------
-    # AFTER COMPETITION
-    #
-    # Show actual results.
-    # ---------------------------------------------------------
-
     else:
-
         submissions = list(
             submissions_qs.order_by(
                 '-total_votes',
@@ -122,35 +86,18 @@ def contests_showcase(request):
             )
         )
 
-        # Top 3 winners
         podium_designs = submissions[:3]
-
-        # Remaining designs
         other_submissions = submissions[3:]
-
-    # ---------------------------------------------------------
-    # Context
-    # ---------------------------------------------------------
 
     context = {
         'competition': active_competition,
-
-        # Competition status
         'voting_is_open': voting_is_open,
-
-        # All designs
         'submissions': submissions,
-
-        # Results
         'podium_designs': podium_designs,
         'other_submissions': other_submissions,
-
-        # User voting information
         'user_voted_ids': user_voted_ids,
         'user_vote_count': user_vote_count,
         'remaining_votes': remaining_votes,
-
-        # Voting limit
         'max_votes': MAX_VOTES_PER_COMPETITION,
     }
 
@@ -161,144 +108,145 @@ def contests_showcase(request):
     )
 
 
-# ============================================================
 # VOTE
-# ============================================================
 
 @login_required
 @require_POST
 def vote(request, submission_id):
     """
     Registers one vote for a design.
-
-    Rules:
-    - User must be logged in.
-    - Competition must still be open.
-    - User cannot vote for their own design.
-    - User can vote for maximum 3 different designs.
-    - A vote cannot be removed.
     """
+    try:
+        submission = get_object_or_404(
+            DesignSubmission.objects.select_related(
+                'competition',
+                'student'
+            ),
+            id=submission_id
+        )
 
-    # ---------------------------------------------------------
-    # Find submission
-    # ---------------------------------------------------------
+        competition = submission.competition
 
-    submission = get_object_or_404(
-        DesignSubmission.objects.select_related(
-            'competition',
-            'student'
-        ),
-        id=submission_id
-    )
+        if not competition.voting_is_open:
+            logger.warning(
+                "Vote rejected: competition closed. "
+                "user_id=%s submission_id=%s competition_id=%s",
+                request.user.id,
+                submission.id,
+                competition.id
+            )
 
-    competition = submission.competition
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'Bu yarışmanın oylaması sona ermiştir.'
+                },
+                status=400
+            )
 
-    # ---------------------------------------------------------
-    # Competition must be open
-    # ---------------------------------------------------------
+        if submission.student == request.user:
+            logger.warning(
+                "Vote rejected: self-vote attempt. "
+                "user_id=%s submission_id=%s",
+                request.user.id,
+                submission.id
+            )
 
-    if not competition.voting_is_open:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'Kendi tasarımınıza oy veremezsiniz.'
+                },
+                status=400
+            )
+
+        already_voted = submission.voters.filter(
+            id=request.user.id
+        ).exists()
+
+        if already_voted:
+            logger.info(
+                "Vote rejected: already voted. "
+                "user_id=%s submission_id=%s",
+                request.user.id,
+                submission.id
+            )
+
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'Bu tasarıma zaten oy verdiniz.'
+                },
+                status=400
+            )
+
+        current_vote_count = (
+            competition.submissions
+            .filter(
+                voters=request.user
+            )
+            .count()
+        )
+
+        if current_vote_count >= MAX_VOTES_PER_COMPETITION:
+            logger.warning(
+                "Vote rejected: vote limit reached. "
+                "user_id=%s competition_id=%s vote_count=%s",
+                request.user.id,
+                competition.id,
+                current_vote_count
+            )
+
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': (
+                        f'En fazla {MAX_VOTES_PER_COMPETITION} '
+                        'tasarıma oy verebilirsiniz.'
+                    ),
+                    'vote_limit_reached': True,
+                    'user_vote_count': current_vote_count,
+                    'remaining_votes': 0,
+                    'max_votes': MAX_VOTES_PER_COMPETITION,
+                },
+                status=400
+            )
+
+        submission.voters.add(request.user)
+
+        current_vote_count += 1
+
+        remaining_votes = max(
+            MAX_VOTES_PER_COMPETITION - current_vote_count,
+            0
+        )
+
+        logger.info(
+            "Vote successful. "
+            "user_id=%s submission_id=%s competition_id=%s",
+            request.user.id,
+            submission.id,
+            competition.id
+        )
 
         return JsonResponse(
             {
-                'status': 'error',
-                'message': 'Bu yarışmanın oylaması sona ermiştir.'
-            },
-            status=400
-        )
-
-    # ---------------------------------------------------------
-    # Prevent self-voting
-    # ---------------------------------------------------------
-
-    if submission.student == request.user:
-
-        return JsonResponse(
-            {
-                'status': 'error',
-                'message': 'Kendi tasarımınıza oy veremezsiniz.'
-            },
-            status=400
-        )
-
-    # ---------------------------------------------------------
-    # Check if already voted
-    # ---------------------------------------------------------
-
-    already_voted = submission.voters.filter(
-        id=request.user.id
-    ).exists()
-
-    if already_voted:
-
-        return JsonResponse(
-            {
-                'status': 'error',
-                'message': 'Bu tasarıma zaten oy verdiniz.'
-            },
-            status=400
-        )
-
-    # ---------------------------------------------------------
-    # Count user's existing votes
-    # ---------------------------------------------------------
-
-    current_vote_count = (
-        competition.submissions
-        .filter(
-            voters=request.user
-        )
-        .count()
-    )
-
-    # ---------------------------------------------------------
-    # Maximum vote limit
-    # ---------------------------------------------------------
-
-    if current_vote_count >= MAX_VOTES_PER_COMPETITION:
-
-        return JsonResponse(
-            {
-                'status': 'error',
-                'message': (
-                    f'En fazla {MAX_VOTES_PER_COMPETITION} '
-                    'tasarıma oy verebilirsiniz.'
-                ),
-                'vote_limit_reached': True,
+                'status': 'success',
+                'action': 'added',
+                'submission_id': submission.id,
+                'total_votes': submission.voters.count(),
                 'user_vote_count': current_vote_count,
-                'remaining_votes': 0,
+                'remaining_votes': remaining_votes,
                 'max_votes': MAX_VOTES_PER_COMPETITION,
-            },
-            status=400
+            }
         )
 
-    # ---------------------------------------------------------
-    # Save vote
-    # ---------------------------------------------------------
+    except Exception:
+        logger.exception(
+            "Unexpected error while processing vote. "
+            "user_id=%s submission_id=%s",
+            request.user.id,
+            submission_id
+        )
 
-    submission.voters.add(request.user)
-
-    current_vote_count += 1
-
-    remaining_votes = max(
-        MAX_VOTES_PER_COMPETITION - current_vote_count,
-        0
-    )
-
-    # ---------------------------------------------------------
-    # Response
-    # ---------------------------------------------------------
-
-    return JsonResponse(
-        {
-            'status': 'success',
-            'action': 'added',
-
-            'submission_id': submission.id,
-            'total_votes': submission.voters.count(),
-            
-            'user_vote_count': current_vote_count,
-            'remaining_votes': remaining_votes,
-            'max_votes': MAX_VOTES_PER_COMPETITION,
-        }
-    )
+        raise

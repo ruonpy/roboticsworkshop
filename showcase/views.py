@@ -1,21 +1,22 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+import logging
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_POST
+from .models import StudentProject
 
-from .models import StudentProject, StudentProfile
-
+logger = logging.getLogger(__name__)
 
 # HOMEPAGE & PROJECT SHOWCASE
 
 def homepage(request):
     project_list = StudentProject.objects.all().order_by('-id')
 
-    # Search
     search_query = request.GET.get('q', '').strip()
+
     if search_query:
         project_list = project_list.filter(
             Q(student__first_name__icontains=search_query) |
@@ -24,22 +25,42 @@ def homepage(request):
             Q(description__icontains=search_query)
         )
 
-    # Project type filter
-    project_type = request.GET.get('type', '').strip().lower()
-    if project_type in ['scratch', 'python']:
-        project_list = project_list.filter(project_type=project_type)
+    project_type = request.GET.get(
+        'type',
+        ''
+    ).strip().lower()
 
-    # Sorting
-    sort_by = request.GET.get('sort', 'newest').strip().lower()
+    if project_type in ['scratch', 'python']:
+        project_list = project_list.filter(
+            project_type=project_type
+        )
+
+    sort_by = request.GET.get(
+        'sort',
+        'newest'
+    ).strip().lower()
+
     if sort_by == 'popular':
-        project_list = project_list.order_by('-like_count', '-id')
+        project_list = project_list.order_by(
+            '-like_count',
+            '-id'
+        )
     else:
         project_list = project_list.order_by('-id')
 
-    # Pagination
-    paginator = Paginator(project_list, 9)
-    page_number = request.GET.get('page', 1)
-    projects = paginator.get_page(page_number)
+    paginator = Paginator(
+        project_list,
+        9
+    )
+
+    page_number = request.GET.get(
+        'page',
+        1
+    )
+
+    projects = paginator.get_page(
+        page_number
+    )
 
     context = {
         'projects': projects,
@@ -48,51 +69,87 @@ def homepage(request):
         'selected_sort': sort_by,
     }
 
-    return render(request, 'index.html', context)
-
+    return render(
+        request,
+        'index.html',
+        context
+    )
 
 # LIKE SYSTEM & XP
 
 @login_required
 @require_POST
 def like_project(request, project_id):
-    with transaction.atomic():
-        project = get_object_or_404(
-            StudentProject.objects.select_for_update(),
-            id=project_id
-        )
-        user = request.user
-
-        # Prevent duplicate likes
-        if project.liked_by.filter(id=user.id).exists():
-            return JsonResponse(
-                {'status': 'error', 'message': 'Zaten beğendiniz.'},
-                status=400
+    try:
+        with transaction.atomic():
+            project = get_object_or_404(
+                StudentProject.objects.select_for_update(),
+                id=project_id
             )
 
-        # Add like
-        project.liked_by.add(user)
+            user = request.user
 
-        # Update cached like counter
-        project.like_count += 1
-        project.save(update_fields=['like_count'])
+            if project.liked_by.filter(
+                id=user.id
+            ).exists():
+                logger.info(
+                    "Like rejected: already liked. "
+                    "user_id=%s project_id=%s",
+                    user.id,
+                    project.id
+                )
 
-        # Profiles are automatically created by User signal
-        project_owner_profile = project.student.profile
+                return JsonResponse(
+                    {
+                        'status': 'error',
+                        'message': 'Zaten beğendiniz.'
+                    },
+                    status=400
+                )
 
-        # XP distribution
-        if project.student == user:
-            # Student likes their own project
-            project_owner_profile.gain_xp(5)
-        else:
-            # Student likes another student's project
-            liker_profile = user.profile
-            liker_profile.gain_xp(2)
-            project_owner_profile.gain_xp(10)
+            project.liked_by.add(user)
 
-    return JsonResponse(
-        {'status': 'success', 'like_count': project.like_count}
-    )
+            project.like_count += 1
+
+            project.save(
+                update_fields=['like_count']
+            )
+
+            project_owner_profile = project.student.profile
+
+            if project.student == user:
+                project_owner_profile.gain_xp(5)
+
+            else:
+                liker_profile = user.profile
+
+                liker_profile.gain_xp(2)
+                project_owner_profile.gain_xp(10)
+
+        logger.info(
+            "Like successful. "
+            "user_id=%s project_id=%s project_owner_id=%s",
+            user.id,
+            project.id,
+            project.student.id
+        )
+
+        return JsonResponse(
+            {
+                'status': 'success',
+                'like_count': project.like_count
+            }
+        )
+
+    except Exception:
+        logger.exception(
+            "Unexpected error while liking project. "
+            "user_id=%s project_id=%s",
+            request.user.id,
+            project_id
+        )
+
+        raise
 
 # STUDENT DASHBOARD
 
@@ -107,4 +164,8 @@ def student_dashboard(request):
         'student': request.user,
     }
 
-    return render(request, 'dashboard.html', context)
+    return render(
+        request,
+        'dashboard.html',
+        context
+    )

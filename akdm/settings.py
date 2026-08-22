@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import environ 
+import sentry_sdk
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,6 +13,16 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
+
+SENTRY_DSN = env('SENTRY_DSN', default='')
+
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        send_default_pii=False,
+        enable_logs=True,
+        environment='production' if not DEBUG else 'development',
+    )
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 

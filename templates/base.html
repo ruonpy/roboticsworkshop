@@ -7,193 +7,79 @@
 
     <title>{% block title %}Atölye Takip Paneli{% endblock %}</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
-        rel="stylesheet"
-    >
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/announcements.css' %}">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/style.css' %}"
-    >
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/navbar.css' %}"
-    >
-    <link
-        rel="stylesheet"
-        href="{% static 'css/announcements.css' %}"
-    >
-
-    <link
-        rel="icon"
-        type="image/svg+xml"
-        href="{% static 'images/favicon.svg' %}"
-    >
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
 
     {% block extra_css %}{% endblock %}
 </head>
-
 <body>
 
-    <!-- =========================================================
-     ANNOUNCEMENT
-     ========================================================= -->
+    <!-- ANNOUNCEMENT -->
+    {% if active_announcement %}
+        <div id="announcement-overlay" class="announcement-overlay" data-announcement-id="{{ active_announcement.id }}">
+            <div class="announcement-modal">
+                
+                <!-- Close button -->
+                <button type="button" class="announcement-close" id="announcement-close" aria-label="Close announcement">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
 
-{% if active_announcement %}
+                <!-- Title -->
+                <h2>{{ active_announcement.title }}</h2>
 
-    <div
-        id="announcement-overlay"
-        class="announcement-overlay"
-        data-announcement-id="{{ active_announcement.id }}"
-    >
+                <!-- Message -->
+                <p class="announcement-message">{{ active_announcement.message }}</p>
 
-        <div class="announcement-modal">
+                <!-- Action -->
+                {% if active_announcement.redirect_url %}
+                    <a href="{{ active_announcement.redirect_url }}" class="announcement-action announcement-action-primary">
+                        {% if active_announcement.announcement_type == 'contest' %}
+                            <i class="fa-solid fa-trophy"></i> Yarışmaya Git
+                        {% elif active_announcement.announcement_type == 'homework' %}
+                            <i class="fa-solid fa-book-open"></i> Ödeve Git
+                        {% elif active_announcement.announcement_type == 'event' %}
+                            <i class="fa-solid fa-calendar-days"></i> Etkinliğe Git
+                        {% else %}
+                            <i class="fa-solid fa-arrow-right"></i> Detayları Gör
+                        {% endif %}
+                    </a>
+                {% endif %}
 
-            <!-- Close button -->
+                <!-- Dismiss -->
+                <button type="button" class="announcement-action announcement-dismiss" id="announcement-dismiss">
+                    Anladım
+                </button>
 
-            <button
-                type="button"
-                class="announcement-close"
-                id="announcement-close"
-                aria-label="Close announcement"
-            >
-
-                <i class="fa-solid fa-xmark"></i>
-
-            </button>
-
-
-            <!-- Title -->
-
-            <h2>
-                {{ active_announcement.title }}
-            </h2>
-
-
-            <!-- Message -->
-
-            <p class="announcement-message">
-                {{ active_announcement.message }}
-            </p>
-
-
-            <!-- Action -->
-
-            {% if active_announcement.redirect_url %}
-
-                <a
-                    href="{{ active_announcement.redirect_url }}"
-                    class="announcement-action announcement-action-primary"
-                >
-
-                    {% if active_announcement.announcement_type == 'contest' %}
-
-                        <i class="fa-solid fa-trophy"></i>
-                        Yarışmaya Git
-
-                    {% elif active_announcement.announcement_type == 'homework' %}
-
-                        <i class="fa-solid fa-book-open"></i>
-                        Ödeve Git
-
-                    {% elif active_announcement.announcement_type == 'event' %}
-
-                        <i class="fa-solid fa-calendar-days"></i>
-                        Etkinliğe Git
-
-                    {% elif active_announcement.announcement_type == 'system' %}
-
-                        <i class="fa-solid fa-arrow-right"></i>
-                        Detayları Gör
-
-                    {% else %}
-
-                        <i class="fa-solid fa-arrow-right"></i>
-                        Detayları Gör
-
-                    {% endif %}
-
-                </a>
-
-            {% endif %}
-
-
-            <!-- Dismiss -->
-
-            <button
-                type="button"
-                class="announcement-action announcement-dismiss"
-                id="announcement-dismiss"
-            >
-
-                Anladım
-
-            </button>
-
+            </div>
         </div>
+    {% endif %}
 
-    </div>
-
-{% endif %}
-
-    <!-- =========================================================
-         NAVBAR
-         ========================================================= -->
-
+    <!-- NAVBAR -->
     {% include 'includes/navbar.html' %}
 
-
-    <!-- =========================================================
-         MAIN CONTENT
-         ========================================================= -->
-
+    <!-- MAIN CONTENT -->
     {% block content %}
     {% endblock %}
 
-
-    <!-- =========================================================
-         FOOTER
-         ========================================================= -->
-
+    <!-- FOOTER -->
     {% include 'includes/footer.html' %}
 
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- =========================================================
-         BOOTSTRAP
-         ========================================================= -->
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-    </script>
-
-
-    <!-- =========================================================
-         ANNOUNCEMENT JS
-         ========================================================= -->
-
+    <!-- ANNOUNCEMENT JS -->
     {% if active_announcement %}
-
         <script src="{% static 'js/announcements.js' %}"></script>
-
     {% endif %}
 
-
-    <!-- =========================================================
-         PAGE-SPECIFIC JS
-         ========================================================= -->
-
+    <!-- PAGE-SPECIFIC JS -->
     {% block extra_js %}
     {% endblock %}
 

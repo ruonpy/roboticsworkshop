@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>500 - Sunucu Hatası</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notfound.css' %}">
+</head>
+<body>
+
+    <main class="notfound-page">
+        <div class="notfound-wrap">
+
+            <!-- 500 BADGE -->
+            <span class="notfound-eyebrow notfound-eyebrow--warning">
+                Hata 500
+            </span>
+
+            <!-- HEADING -->
+            <h1 class="notfound-title">
+                Bir şeyler ters gitti
+            </h1>
+
+            <!-- DESCRIPTION -->
+            <p class="notfound-text">
+                Sorun sende değil, bizde. Sunucu tarafında beklenmeyen
+                bir hata oluştu. Lütfen biraz sonra tekrar deneyin.
+            </p>
+
+            <!-- TERMINAL CARD -->
+            <div class="notfound-terminal">
+                <div class="notfound-terminal-bar">
+                    <span class="notfound-terminal-dot"></span>
+                    <span class="notfound-terminal-dot"></span>
+                    <span class="notfound-terminal-dot"></span>
+                    <span class="notfound-terminal-label">konsol</span>
+                </div>
+
+                <pre class="notfound-terminal-body"><span class="tk-prompt">&gt;&gt;&gt;</span> <span class="tk-call">sunucu.calistir</span>(<span class="tk-string">"istek"</span>)
+<span class="tk-prompt">[INFO]</span> İstek alındı
+<span class="tk-error tk-error--warning">[ERROR] HTTP 500 - Internal Server Error</span>
+<span class="tk-prompt">[INFO]</span> Beklenmeyen bir sunucu hatası oluştu<span class="tk-cursor tk-cursor--warning"></span></pre>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="notfound-actions">
+                <a href="{% url 'homepage' %}" class="notfound-btn notfound-btn-primary">
+                    <i class="fa-solid fa-house"></i>
+                    Anasayfaya dön
+                </a>
+
+                <a href="javascript:location.reload()" class="notfound-btn notfound-btn-ghost">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Tekrar dene
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

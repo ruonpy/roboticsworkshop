@@ -97,6 +97,7 @@
     100% {
         transform: rotate(0deg) translateY(0);
     }
+
     50% {
         transform: rotate(-8deg) translateY(-2px);
     }
@@ -135,6 +136,7 @@
         opacity: 0.35;
         transform: scale(0.7) rotate(0deg);
     }
+
     50% {
         opacity: 1;
         transform: scale(1.15) rotate(20deg);
@@ -148,11 +150,13 @@
             0 0,
             0% 50%;
     }
+
     50% {
         background-position:
             0 0,
             100% 50%;
     }
+
     100% {
         background-position:
             0 0,
@@ -160,14 +164,66 @@
     }
 }
 
+/* ---------------- RESPONSIVE / TABLET ---------------- */
+@media (max-width: 992px) {
+    .navbar .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .navbar-brand {
+        font-size: 0.95rem;
+    }
+
+    .navbar-home-link {
+        font-size: 0.8rem;
+        padding-left: 10px;
+    }
+
+    .contest-nav-btn {
+        height: 39px;
+        padding: 0 13px;
+        font-size: 0.8rem;
+    }
+
+    .contest-nav-icon {
+        font-size: 1rem;
+    }
+
+    .contest-nav-sparkle {
+        display: none;
+    }
+}
+
 /* ---------------- RESPONSIVE / MOBILE ---------------- */
 @media (max-width: 768px) {
+    .navbar {
+        padding-top: 14px !important;
+    }
+
+    .navbar .container {
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 8px;
+    }
+
+    .navbar-brand {
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .navbar-home-link {
+        display: none;
+    }
+
     .contest-nav-btn {
         position: static;
         transform: none;
         height: 38px;
         padding: 0 11px;
         font-size: 0.78rem;
+        border-radius: 11px;
     }
 
     .contest-nav-btn:hover {
@@ -182,27 +238,79 @@
         font-size: 1rem;
     }
 
-    .navbar-home-link {
+    #notificationMenu {
+        width: 38px !important;
+        height: 38px !important;
+        flex-shrink: 0;
+    }
+
+    #userMenu {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        flex-shrink: 0;
+    }
+
+    #userMenu > span:first-of-type {
         display: none;
     }
 }
 
+/* ---------------- RESPONSIVE / SMALL MOBILE ---------------- */
 @media (max-width: 480px) {
+    .navbar .container {
+        padding-left: 9px;
+        padding-right: 9px;
+        gap: 5px;
+    }
+
+    .navbar-brand {
+        font-size: 0.82rem;
+    }
+
     .contest-nav-text {
         display: none;
     }
 
     .contest-nav-btn {
-        width: 42px;
+        width: 38px;
+        height: 38px;
         padding: 0;
         border-radius: 50%;
     }
 
     .contest-nav-icon {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
     }
 
     .contest-nav-sparkle {
         display: none;
+    }
+
+    #notificationMenu {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    #userMenu {
+        width: 36px;
+        height: 36px;
+        padding: 0 !important;
+        justify-content: center;
+    }
+
+    #userMenu img,
+    #userMenu > div {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    #userMenu .badge {
+        display: none;
+    }
+
+    .dropdown-menu {
+        width: calc(100vw - 20px) !important;
+        max-width: 320px;
+        margin-right: 0;
     }
 }

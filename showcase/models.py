@@ -155,10 +155,7 @@ class StudentProject(models.Model):
         check_and_grant_badges(self.student)
         check_teacher_badges(self)
 
-
-# ==========================================================================
-# 🏅 BADGES & METRIC ACHIEVEMENTS ENGINE
-# ==========================================================================
+# BADGES & METRIC ACHIEVEMENTS ENGINE
 
 class Badge(models.Model):
     """
@@ -218,6 +215,8 @@ class StudentBadge(models.Model):
 
     def __str__(self):
         return f"{self.student.username} earned: {self.badge.title}"
+
+# Notification System 
 
 class Notification(models.Model):
     recipient = models.ForeignKey(

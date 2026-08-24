@@ -69,7 +69,7 @@ def grant_badge(user, badge_code):
     """
     Creates the student's badge record if it does not already exist.
     """
-    from .models import Badge, StudentBadge
+    from .models import Badge, StudentBadge, Notification
 
     try:
         badge = Badge.objects.get(
@@ -82,6 +82,11 @@ def grant_badge(user, badge_code):
         )
 
         if created:
+            Notification.objects.create(
+                recipient=user,
+                message=f"🏆 Yeni rozet kazandın: {badge.title}!"
+            )
+
             logger.info(
                 "Badge awarded. "
                 "user_id=%s username=%s badge=%s",
@@ -91,4 +96,4 @@ def grant_badge(user, badge_code):
             )
 
     except Badge.DoesNotExist:
-        pass  # Badge not found, do nothing
+        pass

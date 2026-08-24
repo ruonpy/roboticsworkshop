@@ -1,4 +1,5 @@
 import logging
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
@@ -6,9 +7,12 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
+
 from .models import StudentProject
+from .utils import check_and_grant_badges
 
 logger = logging.getLogger(__name__)
+
 
 # HOMEPAGE & PROJECT SHOWCASE
 
@@ -19,10 +23,10 @@ def homepage(request):
 
     if search_query:
         project_list = project_list.filter(
-            Q(student__first_name__icontains=search_query) |
-            Q(student__last_name__icontains=search_query) |
-            Q(student__username__icontains=search_query) |
-            Q(description__icontains=search_query)
+            Q(student__first_name__icontains=search_query)
+            | Q(student__last_name__icontains=search_query)
+            | Q(student__username__icontains=search_query)
+            | Q(description__icontains=search_query)
         )
 
     project_type = request.GET.get(
@@ -75,6 +79,7 @@ def homepage(request):
         context
     )
 
+
 # LIKE SYSTEM & XP
 
 @login_required
@@ -125,6 +130,8 @@ def like_project(request, project_id):
 
                 liker_profile.gain_xp(2)
                 project_owner_profile.gain_xp(10)
+
+        check_and_grant_badges(user)
 
         logger.info(
             "Like successful. "

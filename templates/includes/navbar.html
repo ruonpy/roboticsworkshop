@@ -25,7 +25,7 @@
 
                     <!-- Notifications -->
                     <div class="dropdown">
-                        <button class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-circle position-relative d-flex align-items-center justify-content-center" type="button" id="notificationMenu" data-bs-toggle="dropdown" aria-expanded="false" style="width: 42px; height: 42px;">
+                        <button class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-circle position-relative d-flex align-items-center justify-content-center" type="button" id="notificationMenu" data-bs-toggle="dropdown" data-read-url="{% url 'mark_notifications_as_read' %}" data-csrf-token="{{ csrf_token }}" aria-expanded="false" style="width: 42px; height: 42px;">
                             <i class="fa-solid fa-bell text-dark"></i>
 
                             {% if unread_notifications_count > 0 %}

@@ -180,3 +180,16 @@ def student_dashboard(request):
         'dashboard.html',
         context
     )
+@login_required
+@require_POST
+def mark_notifications_as_read(request):
+    Notification.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).update(
+        is_read=True
+    )
+
+    return JsonResponse({
+        'status': 'success'
+    })

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # HOMEPAGE & PROJECT SHOWCASE
 
 def homepage(request):
-    project_list = StudentProject.objects.all().order_by('-id')
+    project_list = StudentProject.objects.select_related('student')
 
     search_query = request.GET.get('q', '').strip()
 

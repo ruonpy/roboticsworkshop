@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 # CORE ACHIEVEMENTS & BADGE VERIFICATION ENGINE
 
 def check_and_grant_badges(user):
@@ -68,8 +72,23 @@ def grant_badge(user, badge_code):
     from .models import Badge, StudentBadge
 
     try:
-        badge = Badge.objects.get(code=badge_code)
-        StudentBadge.objects.get_or_create(student=user, badge=badge)
+        badge = Badge.objects.get(
+            code=badge_code
+        )
+
+        student_badge, created = StudentBadge.objects.get_or_create(
+            student=user,
+            badge=badge
+        )
+
+        if created:
+            logger.info(
+                "Badge awarded. "
+                "user_id=%s username=%s badge=%s",
+                user.id,
+                user.username,
+                badge.code
+            )
+
     except Badge.DoesNotExist:
-        # Badge henüz database'e eklenmemişse sistemi durdurma.
-        pass
+        pass  # Badge not found, do nothing

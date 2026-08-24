@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 
-from .models import StudentProject
+from .models import StudentProject, Notification
 from .utils import check_and_grant_badges
 
 logger = logging.getLogger(__name__)
@@ -130,6 +130,10 @@ def like_project(request, project_id):
 
                 liker_profile.gain_xp(2)
                 project_owner_profile.gain_xp(10)
+                Notification.objects.create(
+                    recipient=project.student,
+                    message=f"{user.username} projenizi beğendi."
+                )
 
         check_and_grant_badges(user)
 

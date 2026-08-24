@@ -1,264 +1,151 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-transparent pt-4">
     <div class="container position-relative d-flex justify-content-between align-items-center">
 
-        <!-- =========================================================
-             SOL TARAF
-             ========================================================= -->
-
+        <!-- Left: Logo and Home -->
         <div class="d-flex align-items-center gap-3">
-
-            <a class="navbar-brand fw-bold text-primary mb-0"
-               href="/">
-
-                🤖 AtölyePaneli
-
-            </a>
-
+            <a class="navbar-brand fw-bold text-primary mb-0" href="/">🤖 AtölyePaneli</a>
             <a href="/" class="navbar-home-link">
-
                 <i class="fa-solid fa-house"></i>
                 Ana Sayfa
-
             </a>
-
         </div>
 
-
-        <!-- =========================================================
-             ORTA - TASARIM YARIŞMASI
-             ========================================================= -->
-
-        <a href="{% url 'contests:showcase' %}"
-           class="contest-nav-btn">
-
-            <span class="contest-nav-icon">
-                🏆
-            </span>
-
-            <span class="contest-nav-text">
-                Tasarım Yarışması
-            </span>
-
-            <span class="contest-nav-sparkle sparkle-one">
-                ✦
-            </span>
-
-            <span class="contest-nav-sparkle sparkle-two">
-                ✧
-            </span>
-
+        <!-- Center: Design Contest -->
+        <a href="{% url 'contests:showcase' %}" class="contest-nav-btn">
+            <span class="contest-nav-icon">🏆</span>
+            <span class="contest-nav-text">Tasarım Yarışması</span>
+            <span class="contest-nav-sparkle sparkle-one">✦</span>
+            <span class="contest-nav-sparkle sparkle-two">✧</span>
         </a>
 
-
-        <!-- =========================================================
-             SAĞ TARAF - USER MENU
-             ========================================================= -->
-
+        <!-- Right: User Menu -->
         <div class="ms-auto">
-
             {% if user.is_authenticated %}
+                <div class="d-flex align-items-center gap-2">
 
-                <div class="dropdown">
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <button class="btn btn-white bg-white shadow-sm border border-light-subtle rounded-circle position-relative d-flex align-items-center justify-content-center" type="button" id="notificationMenu" data-bs-toggle="dropdown" aria-expanded="false" style="width: 42px; height: 42px;">
+                            <i class="fa-solid fa-bell text-dark"></i>
 
-                    <button
-                        class="btn btn-white bg-white shadow-sm border border-light-subtle dropdown-toggle rounded-pill d-flex align-items-center gap-2 px-3 py-1"
-                        type="button"
-                        id="userMenu"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-
-                        {% if user.profile.profile_image %}
-
-                            <img
-                                src="{{ user.profile.profile_image.url }}"
-                                class="rounded-circle object-fit-cover"
-                                style="width: 35px; height: 35px;"
-                                alt="Profil">
-
-                        {% else %}
-
-                            <div
-                                class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-                                style="width: 35px; height: 35px; font-size: 0.85rem;">
-
-                                {{ user.first_name|slice:":1" }}{% if user.last_name %}{{ user.last_name|slice:":1" }}{% endif %}
-
-                            </div>
-
-                        {% endif %}
-
-                        <span class="fw-bold text-dark small">
-                            {{ user.first_name }}
-                        </span>
-
-                        <span
-                            class="badge bg-dark rounded-pill fw-bold"
-                            style="font-size: 0.7rem;">
-
-                            LVL {{ user.profile.current_level }}
-
-                        </span>
-
-                    </button>
-
-
-                    <div
-                        class="dropdown-menu dropdown-menu-end p-3 border-0 shadow-lg mt-2"
-                        aria-labelledby="userMenu"
-                        style="width: 320px; border-radius: 16px;">
-
-                        <div class="d-grid gap-2 mt-3">
-
-                            <a
-                                href="{% url 'student_dashboard' %}"
-                                class="btn btn-primary btn-sm rounded-pill fw-bold">
-
-                                <i class="fa-solid fa-chart-line me-1"></i>
-                                Öğrenci Paneli (Dashboard)
-
-                            </a>
-
-                        </div>
-
-
-                        <hr class="dropdown-divider">
-
-
-                        <div class="text-center mb-3">
-
-                            <h6 class="fw-bold text-dark mb-0">
-                                {{ user.first_name }} {{ user.last_name }}
-                            </h6>
-
-                            <small
-                                class="text-primary fw-semibold"
-                                style="font-size: 0.8rem;">
-
-                                {{ user.profile.rank_title }}
-
-                            </small>
-
-                        </div>
-
-
-                        <div class="mb-3">
-
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-
-                                <span class="text-muted small fw-semibold">
-                                    Gelişim (EXP)
+                            {% if unread_notifications_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                    {{ unread_notifications_count }}
                                 </span>
+                            {% endif %}
+                        </button>
 
-                                <span
-                                    class="fw-bold text-success"
-                                    style="font-size: 0.75rem;">
-
-                                    {{ user.profile.progress_percentage }}/100
-
-                                </span>
-
+                        <div class="dropdown-menu dropdown-menu-end p-2 border-0 shadow-lg mt-2" aria-labelledby="notificationMenu" style="width: 350px; max-height: 450px; overflow-y: auto; border-radius: 16px;">
+                            <div class="d-flex justify-content-between align-items-center px-2 py-2">
+                                <h6 class="fw-bold text-dark mb-0">🔔 Bildirimler</h6>
                             </div>
 
+                            <hr class="dropdown-divider">
 
-                            <div
-                                class="progress"
-                                style="height: 10px; background-color: #e9ecef; border-radius: 5px;">
-
-                                <div
-                                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                                    role="progressbar"
-                                    style="width: {{ user.profile.progress_percentage }}%;">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {% if request.user.earned_badges.all %}
-
-                            <div class="border-top pt-2 mt-2">
-
-                                <small
-                                    class="text-muted d-block mb-2 fw-semibold"
-                                    style="font-size: 0.75rem;">
-
-                                    🏆 Kazanılan Rozetler
-
-                                </small>
-
-
-                                <div class="d-flex flex-wrap gap-2">
-
-                                    {% for student_badge in request.user.earned_badges.all %}
-
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-center rounded-circle text-white shadow-sm"
-                                            style="
-                                                width: 35px;
-                                                height: 35px;
-                                                background-color: {{ student_badge.badge.badge_color|default:'#3B82F6' }};
-                                                cursor: pointer;
-                                            "
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="top"
-                                            title="{{ student_badge.badge.title }}: {{ student_badge.badge.description }}">
-
-                                            <i
-                                                class="fa-solid {{ student_badge.badge.icon_class }}"
-                                                style="font-size: 0.9rem;">
-                                            </i>
-
+                            {% for notification in notifications %}
+                                {% if notification.link %}
+                                    <a href="{{ notification.link }}" class="dropdown-item rounded-3 py-3 mb-1">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <div class="flex-shrink-0">
+                                                <span style="font-size: 1.2rem;">🔔</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold text-dark small">{{ notification.message }}</div>
+                                                <small class="text-muted">{{ notification.created_at|timesince }} önce</small>
+                                            </div>
                                         </div>
-
-                                    {% endfor %}
-
+                                    </a>
+                                {% else %}
+                                    <div class="dropdown-item rounded-3 py-3 mb-1">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <div class="flex-shrink-0">
+                                                <span style="font-size: 1.2rem;">❤️</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold text-dark small">{{ notification.message }}</div>
+                                                <small class="text-muted">{{ notification.created_at|timesince }} önce</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="text-center text-muted py-4">
+                                    <i class="fa-regular fa-bell-slash mb-2" style="font-size: 1.5rem;"></i>
+                                    <div class="small">Henüz bildirimin yok.</div>
                                 </div>
-
-                            </div>
-
-                        {% endif %}
-
-
-                        <div class="border-top mt-3 pt-2 text-center">
-
-                            <form
-                                action="{% url 'logout' %}"
-                                method="post"
-                                class="d-inline w-100">
-
-                                {% csrf_token %}
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-semibold">
-
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    Çıkış Yap
-
-                                </button>
-
-                            </form>
-
+                            {% endfor %}
                         </div>
-
                     </div>
 
+                    <!-- User Menu -->
+                    <div class="dropdown">
+                        <button class="btn btn-white bg-white shadow-sm border border-light-subtle dropdown-toggle rounded-pill d-flex align-items-center gap-2 px-3 py-1" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.profile.profile_image %}
+                                <img src="{{ user.profile.profile_image.url }}" class="rounded-circle object-fit-cover" style="width: 35px; height: 35px;" alt="Profil">
+                            {% else %}
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px; font-size: 0.85rem;">
+                                    {{ user.first_name|slice:":1" }}{% if user.last_name %}{{ user.last_name|slice:":1" }}{% endif %}
+                                </div>
+                            {% endif %}
+
+                            <span class="fw-bold text-dark small">{{ user.first_name }}</span>
+                            <span class="badge bg-dark rounded-pill fw-bold" style="font-size: 0.7rem;">LVL {{ user.profile.current_level }}</span>
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-end p-3 border-0 shadow-lg mt-2" aria-labelledby="userMenu" style="width: 320px; border-radius: 16px;">
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="{% url 'student_dashboard' %}" class="btn btn-primary btn-sm rounded-pill fw-bold">
+                                    <i class="fa-solid fa-chart-line me-1"></i>
+                                    Öğrenci Paneli (Dashboard)
+                                </a>
+                            </div>
+
+                            <hr class="dropdown-divider">
+
+                            <div class="text-center mb-3">
+                                <h6 class="fw-bold text-dark mb-0">{{ user.first_name }} {{ user.last_name }}</h6>
+                                <small class="text-primary fw-semibold" style="font-size: 0.8rem;">{{ user.profile.rank_title }}</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-muted small fw-semibold">Gelişim (EXP)</span>
+                                    <span class="fw-bold text-success" style="font-size: 0.75rem;">{{ user.profile.progress_percentage }}/100</span>
+                                </div>
+
+                                <div class="progress" style="height: 10px; background-color: #e9ecef; border-radius: 5px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: {{ user.profile.progress_percentage }}%;"></div>
+                                </div>
+                            </div>
+
+                            {% if request.user.earned_badges.all %}
+                                <div class="border-top pt-2 mt-2">
+                                    <small class="text-muted d-block mb-2 fw-semibold" style="font-size: 0.75rem;">🏆 Kazanılan Rozetler</small>
+
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for student_badge in request.user.earned_badges.all %}
+                                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle text-white shadow-sm" style="width: 35px; height: 35px; background-color: {{ student_badge.badge.badge_color|default:'#3B82F6' }}; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ student_badge.badge.title }}: {{ student_badge.badge.description }}">
+                                                <i class="fa-solid {{ student_badge.badge.icon_class }}" style="font-size: 0.9rem;"></i>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="border-top mt-3 pt-2 text-center">
+                                <form action="{% url 'logout' %}" method="post" class="d-inline w-100">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-semibold">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             {% else %}
-
-                <a
-                    href="{% url 'login' %}"
-                    class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold">
-
-                    Öğrenci Girişi
-
-                </a>
-
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold">Öğrenci Girişi</a>
             {% endif %}
-
         </div>
 
     </div>

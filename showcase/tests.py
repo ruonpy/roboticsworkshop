@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import StudentProject, Badge, StudentBadge
+from .models import StudentProject, Badge, StudentBadge, Notification
 
 
 class LikeProjectTests(TestCase):
@@ -376,4 +376,34 @@ class LikeProjectTests(TestCase):
                 badge=support_star
             ).count(),
             1
+        )
+    def test_like_creates_notification_for_project_owner(self):
+        self.client.login(
+            username='student2',
+            password='testpassword123'
+        )
+
+        response = self.client.post(
+            reverse(
+                'like_project',
+                args=[self.project.id]
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        notification = Notification.objects.get(
+            recipient=self.student
+        )
+
+        self.assertEqual(
+            notification.message,
+            'student2 projenizi beğendi.'
+        )
+
+        self.assertFalse(
+            notification.is_read
         )

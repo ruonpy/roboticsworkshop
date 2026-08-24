@@ -301,6 +301,9 @@
 </main>
 {% endblock %}
 {% block extra_js %}
+<script>
+    const LOGIN_URL = "{% url 'login' %}";
+</script>
 <script src="{% static 'js/like.js' %}" defer></script>
 <script src="{% static 'js/youtube-lazy.js' %}" defer></script>
 {% endblock %}

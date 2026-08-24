@@ -1,11 +1,5 @@
-/* ==========================================================================
-   🔐 SECURITY UTILITIES: CSRF TOKEN ENGINE
-   ========================================================================== */
+// CSRF TOKEN ENGINE
 
-/**
- * Parses browser cookies to retrieve the secure Django CSRF token.
- * Necessary for securing state-changing asynchronous requests.
- */
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -21,9 +15,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-/* ==========================================================================
-   ⚡ SOCIAL ENGAGEMENT MECHANICS: ASYNCHRONOUS LIKE ENGINE
-   ========================================================================== */
+// ASYNCHRONOUS LIKE ENGINE
 
 document.addEventListener('DOMContentLoaded', function() {
     const likeButtons = document.querySelectorAll('.like-btn');
@@ -31,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     likeButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             const projectId = this.getAttribute('data-project-id');
             const countText = this.querySelector('.count-text');
             const iconHeart = this.querySelector('.icon-heart');
@@ -46,11 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .then(async response => {
-                // Sunucu 200 OK dönmediyse (500, 403, 302 vs.) gelen hatayı yakala
                 if (!response.ok) {
                     if (response.status === 403 || response.redirected) {
                         alert("Beğenmek için lütfen önce giriş yapın.");
-                        window.location.href = "/login/"; // Veya login sayfanızın adresi
+                        window.location.href = LOGIN_URL;
                         return;
                     }
                     const errorText = await response.text();
@@ -65,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         iconHeart.classList.remove('fa-regular');
                         iconHeart.classList.add('fa-solid');
                     }
-                    
+
                     currentButton.classList.remove('text-muted');
                     currentButton.classList.add('text-danger', 'btn-light');
                     currentButton.setAttribute('disabled', 'true');

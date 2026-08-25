@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .utils import check_and_grant_badges, check_teacher_badges
+from .utils import check_and_grant_badges
 
 # 🎮 GAMIFICATION & STUDENT PROFILE CONFIGURATION
 
@@ -153,7 +153,6 @@ class StudentProject(models.Model):
         
         # Phase 2: Fire system diagnostics to verify user qualification for specific badges
         check_and_grant_badges(self.student)
-        check_teacher_badges(self)
 
 # BADGES & METRIC ACHIEVEMENTS ENGINE
 
@@ -190,28 +189,35 @@ class Badge(models.Model):
 
 
 class StudentBadge(models.Model):
-    """
-    Relational lookup system tracking validated user prize allocations 
-    accompanied by historical timestamps.
-    """
     student = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
+        User,
+        on_delete=models.CASCADE,
         related_name='earned_badges',
         verbose_name="Recipient Student"
     )
     badge = models.ForeignKey(
-        Badge, 
+        Badge,
         on_delete=models.CASCADE,
         verbose_name="Acquired Award Blueprint"
     )
     earned_at = models.DateTimeField(
-        default=timezone.now, 
+        default=timezone.now,
         verbose_name="Historical Achievement Timestamp"
     )
-
+    
     class Meta:
         unique_together = ('student', 'badge')
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new:
+            Notification.objects.create(
+                recipient=self.student,
+                message=f"🏆 Yeni rozet kazandın: {self.badge.title}!"
+            )
 
     def __str__(self):
         return f"{self.student.username} earned: {self.badge.title}"
